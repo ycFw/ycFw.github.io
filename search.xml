@@ -2,6 +2,14 @@
 <search>
   <entry>
     <title>helloworld</title>
+    <url>/2020/04/04/helloworld-1/</url>
+    <content><![CDATA[<h1 id="helloword"><a href="#helloword" class="headerlink" title="helloword"></a>helloword</h1>]]></content>
+      <tags>
+        <tag>随想</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>helloworld</title>
     <url>/2020/04/03/helloworld/</url>
     <content><![CDATA[<h1 id="这是我的第一篇博客！"><a href="#这是我的第一篇博客！" class="headerlink" title="这是我的第一篇博客！"></a>这是我的第一篇博客！</h1>]]></content>
       <tags>
@@ -9,9 +17,9 @@
       </tags>
   </entry>
   <entry>
-    <title>helloworld</title>
-    <url>/2020/04/04/helloworld-1/</url>
-    <content><![CDATA[<h1 id="helloword"><a href="#helloword" class="headerlink" title="helloword"></a>helloword</h1>]]></content>
+    <title>next</title>
+    <url>/2020/04/04/next/</url>
+    <content><![CDATA[<h1 id="第二篇"><a href="#第二篇" class="headerlink" title="第二篇"></a>第二篇</h1>]]></content>
       <tags>
         <tag>随想</tag>
       </tags>
