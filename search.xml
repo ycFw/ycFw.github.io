@@ -1,121 +1,327 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>测试</title>
-      <link href="/2020/04/04/ce-shi/"/>
-      <url>/2020/04/04/ce-shi/</url>
-      
-        <content type="html"><![CDATA[<ul><li><p>测试图片</p><p><img src="/.com//image-20200404171710578.png" alt="image-20200404171710578"></p></li></ul><p><img src="/.com//image-20200404171722044.png" alt="image-20200404171722044"></p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>开源框架总结</title>
-      <link href="/2020/04/04/kai-yuan-kuang-jia-zong-jie/"/>
-      <url>/2020/04/04/kai-yuan-kuang-jia-zong-jie/</url>
-      
-        <content type="html"><![CDATA[<h1 id="一、Mybatis"><a href="#一、Mybatis" class="headerlink" title="一、Mybatis"></a>一、Mybatis</h1><h2 id="1-Mybatis重要组件"><a href="#1-Mybatis重要组件" class="headerlink" title="1.Mybatis重要组件"></a>1.Mybatis重要组件</h2><ul><li><p>Mapper配置：实体类Student.java-数据表student，XML或注解</p><ul><li><strong><em>Mybatis一般推荐XML</em></strong></li></ul></li><li><p>Mapper接口：DAO层接口（只需要写接口，不用写实现类：需要遵循约定）</p><ul><li>约定1：方法名必须和SQL配置文件（studentMapper.xml）中的id值相同</li><li>约定2：方法的输入参数：必须和sql配置文件的parameterType的类型相同</li><li>约定3：方法的返回值：必须和sql配置文件的resultType的类型相同</li></ul><p>SQL配置文件</p><pre class=" language-sql"><code class="language-sql"><span class="token operator">&lt;</span><span class="token keyword">select</span> id<span class="token operator">=</span><span class="token string">"queryStudentByNo"</span>  parameterType<span class="token operator">=</span><span class="token string">"int"</span> resultType<span class="token operator">=</span><span class="token string">"yc.entity.student"</span><span class="token operator">></span>        <span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> student <span class="token keyword">where</span> stdNo <span class="token operator">=</span> <span class="token comment" spellcheck="true">#{stuNo}</span><span class="token operator">&lt;</span><span class="token operator">/</span><span class="token keyword">select</span><span class="token operator">></span></code></pre><p>根据约定编写接口：</p><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">StudentMapper</span><span class="token punctuation">{</span>  <span class="token keyword">public</span> <span class="token keyword">abstract</span> Student <span class="token function">queryStudentByNo</span><span class="token punctuation">(</span><span class="token keyword">int</span> stuNo<span class="token punctuation">)</span>  <span class="token keyword">public</span> <span class="token keyword">abstract</span> List<span class="token operator">&lt;</span>Student<span class="token operator">></span> <span class="token function">queryStudentByNo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></code></pre><p>特殊情况：</p><ul><li>1.如果不存在parameterType，则代表是一个无参方法</li><li>2.如果不存在resultType，则代表是返回值是void</li><li>3.如果方法的返回值是一个集合类型，则实际的resultType仍然是元素类型，而不是集合类型</li></ul></li></ul><h2 id="2-Mybatis开发时的常用对象"><a href="#2-Mybatis开发时的常用对象" class="headerlink" title="2.Mybatis开发时的常用对象"></a>2.Mybatis开发时的常用对象</h2><ul><li><p>1.SqlSessionFactory：SqlSession工厂。通过SqlSessionFactory中的openSession()方法产生SqlSession</p></li><li><p>2.SqlSession：SqlSession对象（类似于JDBC中的Connection）</p></li><li><p>3.Executor：Mybatis中所有Mapper语句的执行，都是通过Excutor进行的</p></li></ul><h2 id="3-Mybatis四大核心对象"><a href="#3-Mybatis四大核心对象" class="headerlink" title="3.Mybatis四大核心对象"></a>3.Mybatis四大核心对象</h2><ul><li>1.StatementHandler：数据库的处理对象，负责SQL语句 select … from where id = #{}…</li><li>2.ParameterHandler：处理SQL中参数对象，负责SQL中的参数</li><li>3.Executor</li><li>4.ResultSetHandler：处理SQL的返回结果集</li></ul><h2 id="4-Mybatis四大处理器"><a href="#4-Mybatis四大处理器" class="headerlink" title="4.Mybatis四大处理器"></a>4.Mybatis四大处理器</h2><ul><li>1.StatementHandler</li><li>2.ParameterHandler</li><li>3.ResultSetHandler</li><li>4.TypeHandler（类型转换器）</li></ul><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404153940781.png" alt="image-20200404153940781" style="zoom:50%;"><h2 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h2><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404154509551.png" alt="image-20200404154509551" style="zoom:50%;"><h2 id="6-一对一、一对多、延迟加载"><a href="#6-一对一、一对多、延迟加载" class="headerlink" title="6.一对一、一对多、延迟加载"></a>6.一对一、一对多、延迟加载</h2><ul><li><p>一对一</p><pre class=" language-java"><code class="language-java">使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>一对一的延迟加载：使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>的select属性指定延迟加载的SQL语句<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>          <span class="token operator">&lt;</span>association select<span class="token operator">=</span><span class="token string">"延迟加载的SQL语句"</span><span class="token operator">></span>          <span class="token operator">&lt;&lt;</span>association<span class="token operator">>></span><span class="token operator">&lt;</span><span class="token operator">/</span>resultMap<span class="token operator">></span>  </code></pre></li></ul><ul><li>一对多：将一对一中的<association>改为<collection></collection></association></li></ul><h1 id="二、Spring"><a href="#二、Spring" class="headerlink" title="二、Spring"></a>二、Spring</h1><h2 id="1-IOC和AOP"><a href="#1-IOC和AOP" class="headerlink" title="1.IOC和AOP"></a>1.IOC和AOP</h2><ul><li><p>IOC/DI：控制反转/依赖注入    </p><blockquote><p>目的：解耦合</p></blockquote><p>Student student = new Student() 使用new会造成耦合度较高，如何解决？</p><ul><li>工厂模式：类 -&gt; new -&gt; 对象 变成 <strong><em>类 -&gt; 工厂模式 -&gt; 对象</em></strong>  问题：需要自己编写工厂 </li><li>IOC：IOC提供了一个工厂<ul><li>1.往工厂中注入对象（配置xml或注解）</li><li>2.从工厂中获取对象</li></ul></li><li>总结：IOC可以通过配置的方式来创建对象</li></ul></li><li><p>AOP：面向方面（切面）编程</p><blockquote><p>OOP的补充，不是替代</p></blockquote><p>面向对象的不足？</p><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160145060.png" alt="image-20200404160145060" style="zoom:50%;"><p>以上OOP两个不足，可以通过AOP进行改进：切点和切面，前置通知和后置通知</p><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160707082.png" alt="image-20200404160707082" style="zoom:50%;"><p>使用AOP的实际场景：</p><ul><li>日志：删除</li><li>安全统一校验</li></ul></li></ul><h2 id="2-Spring中的设计模式"><a href="#2-Spring中的设计模式" class="headerlink" title="2.Spring中的设计模式"></a>2.Spring中的设计模式</h2><ul><li>工厂模式：创建bean、获取bean</li><li>单例模式/原型模式：创建bean时，设置作用域，singleton/prototype</li><li>监听模式：自定义时间发布，监听模式。如ApplicationListener，当某个<strong>动作触发</strong>时，就会自动执行一个通知</li><li>责任链模式：AOP</li><li>策略模式：创建代理</li></ul><h1 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h1><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404161935175.png" alt="image-20200404161935175" style="zoom:50%;"><h1 id="四、Spring-Boot"><a href="#四、Spring-Boot" class="headerlink" title="四、Spring Boot"></a>四、Spring Boot</h1><blockquote><p>最主要的功能：自动装配</p><p>以前不用spring boot，需要自己配置框架的配置文件</p><p>spring，mabatis，ssm整合等情况，需要边和一大堆配置文件</p><p>如果使用Spring Boot，则可以省略配置。好处：将开发重点放在业务逻辑上，而不是配置上</p></blockquote><ul><li>自动装配的原理？约定优于配置（能约定就别配置）：将一些配置功能，前置到源码底层实现好</li><li>特点1：版本仲裁中心：以后引入依赖时，不用再写版本号。好处：1.不用记版本号 2.避免冲突</li><li>特点2：提供了很多starter（场景启动器）：批量jar。<ul><li>假设开发web项目：json.jar  tomcat.jar hibernate-validator.jar…  ==&gt; spring-boot-starter-web</li><li>以后使用web项目，只需要引入spring-boot-starter-web</li></ul></li><li>自动装配的应用时：@EnableAutoConfiguration 就是springboot提供自动装配的注解</li></ul><h1 id="五、Spring-Cloud"><a href="#五、Spring-Cloud" class="headerlink" title="五、Spring Cloud"></a>五、Spring Cloud</h1><blockquote><p>微服务治理框架，内置了许多组件</p></blockquote><ul><li>Eureka<ul><li>服务注册中，类似于</li></ul></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> Spring </tag>
-            
-            <tag> Mybatis </tag>
-            
-            <tag> SpringBoot </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>arrayList底层</title>
-      <link href="/2020/04/04/arraylist-di-ceng/"/>
-      <url>/2020/04/04/arraylist-di-ceng/</url>
-      
-        <content type="html"><![CDATA[<h2 id="1-搭建idea源码调试环境"><a href="#1-搭建idea源码调试环境" class="headerlink" title="1.搭建idea源码调试环境"></a>1.搭建idea源码调试环境</h2><ul><li>1.新建project项目JavaSourceLearn，创建基础目录source和test<ul><li>source：防止Java源码</li><li>test：防止测试代码和测试入口：arrayList，hashMap等</li></ul></li><li>2.project structure下找到sdk，将source.zip文件解压到source目录</li><li>3.写个hashMap调试用例，<code>F7</code>进入单步调试，此时进不去内部源码，只在外层调试。进入<code>preference--&gt;debugger--&gt;stepping--&gt;Do not into classes去掉勾选</code>即可</li></ul><h2 id="2-put操作"><a href="#2-put操作" class="headerlink" title="2.put操作"></a>2.put操作</h2><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 源码 </tag>
-            
-            <tag> arrayList </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>idea使用</title>
-      <link href="/2020/04/04/idea-shi-yong/"/>
-      <url>/2020/04/04/idea-shi-yong/</url>
-      
-        <content type="html"><![CDATA[<h2 id="1-添加类和方法注释"><a href="#1-添加类和方法注释" class="headerlink" title="1.添加类和方法注释"></a>1.添加类和方法注释</h2><ul><li><code>File -&gt; Settings -&gt; Editor -&gt; File and Code Templates -&gt; Files</code> 修改class头文件</li></ul><h2 id="2-常用快捷键"><a href="#2-常用快捷键" class="headerlink" title="2.常用快捷键"></a>2.常用快捷键</h2><ul><li>1.进入preference设置 <code>command+,</code></li><li></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> idea </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>再谈hashcode和equals</title>
-      <link href="/2020/04/04/zai-tan-hashcode-he-equals/"/>
-      <url>/2020/04/04/zai-tan-hashcode-he-equals/</url>
-      
-        <content type="html"><![CDATA[<h2 id="1、hash表"><a href="#1、hash表" class="headerlink" title="1、hash表"></a>1、hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><h2 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h2><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 面试必备 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>搭建过程</title>
-      <link href="/2020/04/04/da-jian-guo-cheng/"/>
-      <url>/2020/04/04/da-jian-guo-cheng/</url>
-      
-        <content type="html"><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul><li><code>hexo g</code>  初始化</li><li><code>hexo s</code>  上传至本地服务器</li><li><code>hexo d</code>  部署到个人网站</li></ul><h1 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h1><ul><li><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">https://github.com/blinkfox/hexo-theme-matery</a></li></ul><h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><ul><li><a href="https://ycfw.github.io" target="_blank" rel="noopener">https://ycfw.github.io</a></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+<search>
+  <entry>
+    <title>搭建过程</title>
+    <url>/2020/04/04/da-jian-guo-cheng/</url>
+    <content><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul>
+<li><code>hexo g</code>  初始化</li>
+<li><code>hexo s</code>  上传至本地服务器</li>
+<li><code>hexo d</code>  部署到个人网站</li>
+</ul>
+<h1 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h1><ul>
+<li><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">https://github.com/blinkfox/hexo-theme-matery</a></li>
+</ul>
+<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><ul>
+<li><a href="https://ycfw.github.io" target="_blank" rel="noopener">https://ycfw.github.io</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>再谈hashcode和equals</title>
+    <url>/2020/04/04/zai-tan-hashcode-he-equals/</url>
+    <content><![CDATA[<h2 id="1、hash表"><a href="#1、hash表" class="headerlink" title="1、hash表"></a>1、hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><h2 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h2><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>面试必备</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>arrayList底层</title>
+    <url>/2020/04/04/arraylist-di-ceng/</url>
+    <content><![CDATA[<h2 id="1-搭建idea源码调试环境"><a href="#1-搭建idea源码调试环境" class="headerlink" title="1.搭建idea源码调试环境"></a>1.搭建idea源码调试环境</h2><ul>
+<li>1.新建project项目JavaSourceLearn，创建基础目录source和test<ul>
+<li>source：防止Java源码</li>
+<li>test：防止测试代码和测试入口：arrayList，hashMap等</li>
+</ul>
+</li>
+<li>2.project structure下找到sdk，将source.zip文件解压到source目录</li>
+<li>3.写个hashMap调试用例，<code>F7</code>进入单步调试，此时进不去内部源码，只在外层调试。进入<code>preference--&gt;debugger--&gt;stepping--&gt;Do not into classes去掉勾选</code>即可</li>
+</ul>
+<h2 id="2-put操作"><a href="#2-put操作" class="headerlink" title="2.put操作"></a>2.put操作</h2><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>源码</tag>
+        <tag>arrayList</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>idea使用</title>
+    <url>/2020/04/04/idea-shi-yong/</url>
+    <content><![CDATA[<h2 id="1-添加类和方法注释"><a href="#1-添加类和方法注释" class="headerlink" title="1.添加类和方法注释"></a>1.添加类和方法注释</h2><ul>
+<li><code>File -&gt; Settings -&gt; Editor -&gt; File and Code Templates -&gt; Files</code> 修改class头文件</li>
+</ul>
+<h2 id="2-常用快捷键"><a href="#2-常用快捷键" class="headerlink" title="2.常用快捷键"></a>2.常用快捷键</h2><ul>
+<li>1.进入preference设置 <code>command+,</code></li>
+<li></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>开源框架总结</title>
+    <url>/2020/04/04/kai-yuan-kuang-jia-zong-jie/</url>
+    <content><![CDATA[<h1 id="一、Mybatis"><a href="#一、Mybatis" class="headerlink" title="一、Mybatis"></a>一、Mybatis</h1><h2 id="1-Mybatis重要组件"><a href="#1-Mybatis重要组件" class="headerlink" title="1.Mybatis重要组件"></a>1.Mybatis重要组件</h2><ul>
+<li><p>Mapper配置：实体类Student.java-数据表student，XML或注解</p>
+<ul>
+<li><strong><em>Mybatis一般推荐XML</em></strong></li>
+</ul>
+</li>
+<li><p>Mapper接口：DAO层接口（只需要写接口，不用写实现类：需要遵循约定）</p>
+<ul>
+<li>约定1：方法名必须和SQL配置文件（studentMapper.xml）中的id值相同</li>
+<li>约定2：方法的输入参数：必须和sql配置文件的parameterType的类型相同</li>
+<li>约定3：方法的返回值：必须和sql配置文件的resultType的类型相同</li>
+</ul>
+<p>SQL配置文件</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token operator">&lt;</span><span class="token keyword">select</span> id<span class="token operator">=</span><span class="token string">"queryStudentByNo"</span>  parameterType<span class="token operator">=</span><span class="token string">"int"</span> resultType<span class="token operator">=</span><span class="token string">"yc.entity.student"</span><span class="token operator">></span>
+        <span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> student <span class="token keyword">where</span> stdNo <span class="token operator">=</span> <span class="token comment" spellcheck="true">#{stuNo}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span><span class="token keyword">select</span><span class="token operator">></span></code></pre>
+<p>根据约定编写接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">StudentMapper</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">abstract</span> Student <span class="token function">queryStudentByNo</span><span class="token punctuation">(</span><span class="token keyword">int</span> stuNo<span class="token punctuation">)</span>
+  <span class="token keyword">public</span> <span class="token keyword">abstract</span> List<span class="token operator">&lt;</span>Student<span class="token operator">></span> <span class="token function">queryStudentByNo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>特殊情况：</p>
+<ul>
+<li>1.如果不存在parameterType，则代表是一个无参方法</li>
+<li>2.如果不存在resultType，则代表是返回值是void</li>
+<li>3.如果方法的返回值是一个集合类型，则实际的resultType仍然是元素类型，而不是集合类型</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Mybatis开发时的常用对象"><a href="#2-Mybatis开发时的常用对象" class="headerlink" title="2.Mybatis开发时的常用对象"></a>2.Mybatis开发时的常用对象</h2><ul>
+<li><p>1.SqlSessionFactory：SqlSession工厂。通过SqlSessionFactory中的openSession()方法产生SqlSession</p>
+</li>
+<li><p>2.SqlSession：SqlSession对象（类似于JDBC中的Connection）</p>
+</li>
+<li><p>3.Executor：Mybatis中所有Mapper语句的执行，都是通过Excutor进行的</p>
+</li>
+</ul>
+<h2 id="3-Mybatis四大核心对象"><a href="#3-Mybatis四大核心对象" class="headerlink" title="3.Mybatis四大核心对象"></a>3.Mybatis四大核心对象</h2><ul>
+<li>1.StatementHandler：数据库的处理对象，负责SQL语句 select … from where id = #{}…</li>
+<li>2.ParameterHandler：处理SQL中参数对象，负责SQL中的参数</li>
+<li>3.Executor</li>
+<li>4.ResultSetHandler：处理SQL的返回结果集</li>
+</ul>
+<h2 id="4-Mybatis四大处理器"><a href="#4-Mybatis四大处理器" class="headerlink" title="4.Mybatis四大处理器"></a>4.Mybatis四大处理器</h2><ul>
+<li>1.StatementHandler</li>
+<li>2.ParameterHandler</li>
+<li>3.ResultSetHandler</li>
+<li>4.TypeHandler（类型转换器）</li>
+</ul>
+<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404153940781.png" alt="image-20200404153940781" style="zoom:50%;">
+
+<h2 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h2><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404154509551.png" alt="image-20200404154509551" style="zoom:50%;">
+
+<h2 id="6-一对一、一对多、延迟加载"><a href="#6-一对一、一对多、延迟加载" class="headerlink" title="6.一对一、一对多、延迟加载"></a>6.一对一、一对多、延迟加载</h2><ul>
+<li><p>一对一</p>
+<pre class=" language-java"><code class="language-java">使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>
+一对一的延迟加载：
+使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>的select属性指定延迟加载的SQL语句
+<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>
+          <span class="token operator">&lt;</span>association select<span class="token operator">=</span><span class="token string">"延迟加载的SQL语句"</span><span class="token operator">></span>
+          <span class="token operator">&lt;&lt;</span>association<span class="token operator">>></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>resultMap<span class="token operator">></span>  </code></pre>
+</li>
+</ul>
+<ul>
+<li>一对多：将一对一中的<association>改为<collection></collection></association></li>
+</ul>
+<h1 id="二、Spring"><a href="#二、Spring" class="headerlink" title="二、Spring"></a>二、Spring</h1><h2 id="1-IOC和AOP"><a href="#1-IOC和AOP" class="headerlink" title="1.IOC和AOP"></a>1.IOC和AOP</h2><ul>
+<li><p>IOC/DI：控制反转/依赖注入    </p>
+<blockquote>
+<p>目的：解耦合</p>
+</blockquote>
+<p>Student student = new Student() 使用new会造成耦合度较高，如何解决？</p>
+<ul>
+<li>工厂模式：类 -&gt; new -&gt; 对象 变成 <strong><em>类 -&gt; 工厂模式 -&gt; 对象</em></strong>  问题：需要自己编写工厂 </li>
+<li>IOC：IOC提供了一个工厂<ul>
+<li>1.往工厂中注入对象（配置xml或注解）</li>
+<li>2.从工厂中获取对象</li>
+</ul>
+</li>
+<li>总结：IOC可以通过配置的方式来创建对象</li>
+</ul>
+</li>
+<li><p>AOP：面向方面（切面）编程</p>
+<blockquote>
+<p>OOP的补充，不是替代</p>
+</blockquote>
+<p>面向对象的不足？</p>
+<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160145060.png" alt="image-20200404160145060" style="zoom:50%;">
+
+<p>以上OOP两个不足，可以通过AOP进行改进：切点和切面，前置通知和后置通知</p>
+<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160707082.png" alt="image-20200404160707082" style="zoom:50%;">
+
+<p>使用AOP的实际场景：</p>
+<ul>
+<li>日志：删除</li>
+<li>安全统一校验</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Spring中的设计模式"><a href="#2-Spring中的设计模式" class="headerlink" title="2.Spring中的设计模式"></a>2.Spring中的设计模式</h2><ul>
+<li>工厂模式：创建bean、获取bean</li>
+<li>单例模式/原型模式：创建bean时，设置作用域，singleton/prototype</li>
+<li>监听模式：自定义时间发布，监听模式。如ApplicationListener，当某个<strong>动作触发</strong>时，就会自动执行一个通知</li>
+<li>责任链模式：AOP</li>
+<li>策略模式：创建代理</li>
+</ul>
+<h1 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h1><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404161935175.png" alt="image-20200404161935175" style="zoom:50%;">
+
+<h1 id="四、Spring-Boot"><a href="#四、Spring-Boot" class="headerlink" title="四、Spring Boot"></a>四、Spring Boot</h1><blockquote>
+<p>最主要的功能：自动装配</p>
+<p>以前不用spring boot，需要自己配置框架的配置文件</p>
+<p>spring，mabatis，ssm整合等情况，需要边和一大堆配置文件</p>
+<p>如果使用Spring Boot，则可以省略配置。好处：将开发重点放在业务逻辑上，而不是配置上</p>
+</blockquote>
+<ul>
+<li>自动装配的原理？约定优于配置（能约定就别配置）：将一些配置功能，前置到源码底层实现好</li>
+<li>特点1：版本仲裁中心：以后引入依赖时，不用再写版本号。好处：1.不用记版本号 2.避免冲突</li>
+<li>特点2：提供了很多starter（场景启动器）：批量jar。<ul>
+<li>假设开发web项目：json.jar  tomcat.jar hibernate-validator.jar…  ==&gt; spring-boot-starter-web</li>
+<li>以后使用web项目，只需要引入spring-boot-starter-web</li>
+</ul>
+</li>
+<li>自动装配的应用时：@EnableAutoConfiguration 就是springboot提供自动装配的注解</li>
+</ul>
+<h1 id="五、Spring-Cloud"><a href="#五、Spring-Cloud" class="headerlink" title="五、Spring Cloud"></a>五、Spring Cloud</h1><blockquote>
+<p>微服务治理框架，内置了许多组件</p>
+</blockquote>
+<ul>
+<li>Eureka<ul>
+<li>服务注册中，类似于</li>
+</ul>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>测试</title>
+    <url>/2020/04/04/ce-shi/</url>
+    <content><![CDATA[<ul>
+<li><p>测试图片</p>
+<img src="/.com//image-20200404171920768.png" alt="image-20200404171920768" style="zoom:50%;">
+
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+  </entry>
 </search>
