@@ -545,7 +545,72 @@
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>以后再要增加其他用户的操作权限，只需要去枚举类进行添加即可，方便快捷！</p>
-<h2 id="4-工厂模式"><a href="#4-工厂模式" class="headerlink" title="4.工厂模式"></a>4.工厂模式</h2><h2 id="5-策略模式"><a href="#5-策略模式" class="headerlink" title="5.策略模式"></a>5.策略模式</h2><script>
+<h2 id="4-工厂模式"><a href="#4-工厂模式" class="headerlink" title="4.工厂模式"></a>4.工厂模式</h2><blockquote>
+<p>工厂模式的思想：首先针对业务的不同，分别编写各自的业务类，再用工厂类聚合各个业务类。</p>
+</blockquote>
+<p>首先编写三个业务类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RootAdminRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">RootAdminRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission A"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderAdminRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">OrderAdminRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission B"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NormalRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">NormalRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission C"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>编写工厂类：工厂类生产有权限的角色对象，对象行为被公共接口定义</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RoleFactory</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> RoleOperation<span class="token operator">></span> roleOperationMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//静态块，初始化工作最先执行</span>
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"ROOT_ADMIN"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">RootAdminRole</span><span class="token punctuation">(</span><span class="token string">"ROOT_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"ORDER_ADMIN"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">OrderAdminRole</span><span class="token punctuation">(</span><span class="token string">"ORDER_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"NORMAL"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">NormalRole</span><span class="token punctuation">(</span><span class="token string">"NORMAL"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> RoleOperation <span class="token function">getOp</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> roleOperationMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>简单调用：一行代码即可。先得到角色对象，再执行op()行为</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">judge</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token comment" spellcheck="true">//        return RoleEnum.valueOf(roleName).op();</span>
+
+        <span class="token keyword">return</span> RoleFactory<span class="token punctuation">.</span><span class="token function">getOp</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>这样的话以后想扩展条件也很容易，只需要增加新代码，而不需要动以前的业务代码，非常符合“开闭原则”。</p>
+<h2 id="5-策略模式"><a href="#5-策略模式" class="headerlink" title="5.策略模式"></a>5.策略模式</h2><script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
