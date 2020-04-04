@@ -477,7 +477,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="一、Mybatis"><a href="#一、Mybatis" class="headerlink" title="一、Mybatis"></a>一、Mybatis</h1><h2 id="1-Mybatis重要组件"><a href="#1-Mybatis重要组件" class="headerlink" title="1.Mybatis重要组件"></a>1.Mybatis重要组件</h2><ul>
+                <h2 id="一、Mybatis"><a href="#一、Mybatis" class="headerlink" title="一、Mybatis"></a>一、Mybatis</h2><h3 id="1-Mybatis重要组件"><a href="#1-Mybatis重要组件" class="headerlink" title="1.Mybatis重要组件"></a>1.Mybatis重要组件</h3><ul>
 <li><p>Mapper配置：实体类Student.java-数据表student，XML或注解</p>
 <ul>
 <li><strong><em>Mybatis一般推荐XML</em></strong></li>
@@ -507,7 +507,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-Mybatis开发时的常用对象"><a href="#2-Mybatis开发时的常用对象" class="headerlink" title="2.Mybatis开发时的常用对象"></a>2.Mybatis开发时的常用对象</h2><ul>
+<h3 id="2-Mybatis开发时的常用对象"><a href="#2-Mybatis开发时的常用对象" class="headerlink" title="2.Mybatis开发时的常用对象"></a>2.Mybatis开发时的常用对象</h3><ul>
 <li><p>1.SqlSessionFactory：SqlSession工厂。通过SqlSessionFactory中的openSession()方法产生SqlSession</p>
 </li>
 <li><p>2.SqlSession：SqlSession对象（类似于JDBC中的Connection）</p>
@@ -515,13 +515,13 @@
 <li><p>3.Executor：Mybatis中所有Mapper语句的执行，都是通过Excutor进行的</p>
 </li>
 </ul>
-<h2 id="3-Mybatis四大核心对象"><a href="#3-Mybatis四大核心对象" class="headerlink" title="3.Mybatis四大核心对象"></a>3.Mybatis四大核心对象</h2><ul>
+<h3 id="3-Mybatis四大核心对象"><a href="#3-Mybatis四大核心对象" class="headerlink" title="3.Mybatis四大核心对象"></a>3.Mybatis四大核心对象</h3><ul>
 <li>1.StatementHandler：数据库的处理对象，负责SQL语句 select … from where id = #{}…</li>
 <li>2.ParameterHandler：处理SQL中参数对象，负责SQL中的参数</li>
 <li>3.Executor</li>
 <li>4.ResultSetHandler：处理SQL的返回结果集</li>
 </ul>
-<h2 id="4-Mybatis四大处理器"><a href="#4-Mybatis四大处理器" class="headerlink" title="4.Mybatis四大处理器"></a>4.Mybatis四大处理器</h2><ul>
+<h3 id="4-Mybatis四大处理器"><a href="#4-Mybatis四大处理器" class="headerlink" title="4.Mybatis四大处理器"></a>4.Mybatis四大处理器</h3><ul>
 <li><p>1.StatementHandler</p>
 </li>
 <li><p>2.ParameterHandler</p>
@@ -532,8 +532,8 @@
 <p><u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhw96mioxj30xo0dwdhi.jpg" alt=""></u></p>
 </li>
 </ul>
-<h2 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h2><p>​    <u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwalsbsij30xc0gsdm0.jpg" alt=""></u></p>
-<h2 id="6-一对一、一对多、延迟加载"><a href="#6-一对一、一对多、延迟加载" class="headerlink" title="6.一对一、一对多、延迟加载"></a>6.一对一、一对多、延迟加载</h2><ul>
+<h3 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h3><p>​    <u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwalsbsij30xc0gsdm0.jpg" alt=""></u></p>
+<h3 id="6-一对一、一对多、延迟加载"><a href="#6-一对一、一对多、延迟加载" class="headerlink" title="6.一对一、一对多、延迟加载"></a>6.一对一、一对多、延迟加载</h3><ul>
 <li><p>一对一</p>
 <pre class=" language-java"><code class="language-java">使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>
 一对一的延迟加载：
@@ -547,7 +547,7 @@
 <ul>
 <li>一对多：将一对一中的<association>改为<collection></collection></association></li>
 </ul>
-<h1 id="二、Spring"><a href="#二、Spring" class="headerlink" title="二、Spring"></a>二、Spring</h1><h2 id="1-IOC和AOP"><a href="#1-IOC和AOP" class="headerlink" title="1.IOC和AOP"></a>1.IOC和AOP</h2><ul>
+<h2 id="二、Spring"><a href="#二、Spring" class="headerlink" title="二、Spring"></a>二、Spring</h2><h3 id="1-IOC和AOP"><a href="#1-IOC和AOP" class="headerlink" title="1.IOC和AOP"></a>1.IOC和AOP</h3><ul>
 <li><p>IOC/DI：控制反转/依赖注入    </p>
 <blockquote>
 <p>目的：解耦合</p>
@@ -578,15 +578,15 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-Spring中的设计模式"><a href="#2-Spring中的设计模式" class="headerlink" title="2.Spring中的设计模式"></a>2.Spring中的设计模式</h2><ul>
+<h3 id="2-Spring中的设计模式"><a href="#2-Spring中的设计模式" class="headerlink" title="2.Spring中的设计模式"></a>2.Spring中的设计模式</h3><ul>
 <li>工厂模式：创建bean、获取bean</li>
 <li>单例模式/原型模式：创建bean时，设置作用域，singleton/prototype</li>
 <li>监听模式：自定义时间发布，监听模式。如ApplicationListener，当某个<strong>动作触发</strong>时，就会自动执行一个通知</li>
 <li>责任链模式：AOP</li>
 <li>策略模式：创建代理</li>
 </ul>
-<h1 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h1><p>​    <img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwbtub3sj312e0hy78u.jpg" alt=""></p>
-<h1 id="四、Spring-Boot"><a href="#四、Spring-Boot" class="headerlink" title="四、Spring Boot"></a>四、Spring Boot</h1><blockquote>
+<h2 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h2><p>​    <img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwbtub3sj312e0hy78u.jpg" alt=""></p>
+<h2 id="四、Spring-Boot"><a href="#四、Spring-Boot" class="headerlink" title="四、Spring Boot"></a>四、Spring Boot</h2><blockquote>
 <p>最主要的功能：自动装配</p>
 <p>以前不用spring boot，需要自己配置框架的配置文件</p>
 <p>spring，mabatis，ssm整合等情况，需要边和一大堆配置文件</p>
@@ -602,7 +602,7 @@
 </li>
 <li>自动装配的应用时：@EnableAutoConfiguration 就是springboot提供自动装配的注解</li>
 </ul>
-<h1 id="五、Spring-Cloud"><a href="#五、Spring-Cloud" class="headerlink" title="五、Spring Cloud"></a>五、Spring Cloud</h1><blockquote>
+<h2 id="五、Spring-Cloud"><a href="#五、Spring-Cloud" class="headerlink" title="五、Spring Cloud"></a>五、Spring Cloud</h2><blockquote>
 <p>微服务治理框架，内置了许多组件</p>
 </blockquote>
 <ul>
