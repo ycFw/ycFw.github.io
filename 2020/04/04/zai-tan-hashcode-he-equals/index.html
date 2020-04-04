@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="搭建过程, 一个码仔">
+    <meta name="keywords" content="再谈hashcode和equals, 一个码仔">
     <meta name="description" content="只要心够决">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>搭建过程 | 一个码仔</title>
+    <title>再谈hashcode和equals | 一个码仔</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">搭建过程</h1>
+                    <h1 class="description center-align post-title">再谈hashcode和equals</h1>
                 </div>
             </div>
         </div>
@@ -436,8 +436,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/hexo/">
-                                <span class="chip bg-color">hexo</span>
+                            <a href="/tags/%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/">
+                                <span class="chip bg-color">面试必备</span>
                             </a>
                         
                     </div>
@@ -469,18 +469,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul>
-<li><code>hexo g</code>  初始化</li>
-<li><code>hexo s</code>  上传至本地服务器</li>
-<li><code>hexo d</code>  部署到个人网站</li>
-</ul>
-<h1 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h1><ul>
-<li><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">https://github.com/blinkfox/hexo-theme-matery</a></li>
-</ul>
-<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><ul>
-<li><a href="https://ycfw.github.io" target="_blank" rel="noopener">https://ycfw.github.io</a></li>
-</ul>
-<script>
+                <h2 id="1hash表"><a href="#1hash表" class="headerlink" title="1hash表"></a>1hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
@@ -523,7 +512,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/04/04/da-jian-guo-cheng/">http://yoursite.com/2020/04/04/da-jian-guo-cheng/</a>
+                    <a href="http://yoursite.com/2020/04/04/zai-tan-hashcode-he-equals/">http://yoursite.com/2020/04/04/zai-tan-hashcode-he-equals/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -561,8 +550,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/hexo/">
-                                    <span class="chip bg-color">hexo</span>
+                                <a href="/tags/%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/">
+                                    <span class="chip bg-color">面试必备</span>
                                 </a>
                             
                         </div>
@@ -728,9 +717,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/04/04/zai-tan-hashcode-he-equals/">
                     <div class="card-image">
@@ -751,9 +741,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -762,6 +752,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -777,7 +768,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2020/04/04/da-jian-guo-cheng/">
@@ -816,7 +807,6 @@ https://ycfw.githu
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     

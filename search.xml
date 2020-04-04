@@ -1,26 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>搭建过程</title>
-      <link href="/2020/04/04/da-jian-guo-cheng/"/>
-      <url>/2020/04/04/da-jian-guo-cheng/</url>
-      
-        <content type="html"><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul><li><code>hexo g</code>  初始化</li><li><code>hexo s</code>  上传至本地服务器</li><li><code>hexo d</code>  部署到个人网站</li></ul><h1 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h1><ul><li><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">https://github.com/blinkfox/hexo-theme-matery</a></li><li></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+<search>
+  <entry>
+    <title>搭建过程</title>
+    <url>/2020/04/04/da-jian-guo-cheng/</url>
+    <content><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><ul>
+<li><code>hexo g</code>  初始化</li>
+<li><code>hexo s</code>  上传至本地服务器</li>
+<li><code>hexo d</code>  部署到个人网站</li>
+</ul>
+<h1 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h1><ul>
+<li><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">https://github.com/blinkfox/hexo-theme-matery</a></li>
+</ul>
+<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><ul>
+<li><a href="https://ycfw.github.io" target="_blank" rel="noopener">https://ycfw.github.io</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>再谈hashcode和equals</title>
+    <url>/2020/04/04/zai-tan-hashcode-he-equals/</url>
+    <content><![CDATA[<h2 id="1hash表"><a href="#1hash表" class="headerlink" title="1hash表"></a>1hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>面试必备</tag>
+      </tags>
+  </entry>
 </search>
