@@ -63,4 +63,73 @@
         <tag>面试必备</tag>
       </tags>
   </entry>
+  <entry>
+    <title>arrayList底层</title>
+    <url>/2020/04/04/arraylist-di-ceng/</url>
+    <content><![CDATA[<h2 id="1-搭建idea源码调试环境"><a href="#1-搭建idea源码调试环境" class="headerlink" title="1.搭建idea源码调试环境"></a>1.搭建idea源码调试环境</h2><ul>
+<li>1.新建project项目JavaSourceLearn，创建基础目录source和test<ul>
+<li>source：防止Java源码</li>
+<li>test：防止测试代码和测试入口：arrayList，hashMap等</li>
+</ul>
+</li>
+<li>2.project structure下找到sdk，将source.zip文件解压到source目录</li>
+<li>3.写个hashMap调试用例，<code>F7</code>进入单步调试，此时进不去内部源码，只在外层调试。进入<code>preference--&gt;debugger--&gt;stepping--&gt;Do not into classes去掉勾选</code>即可</li>
+</ul>
+<h2 id="2-put操作"><a href="#2-put操作" class="headerlink" title="2.put操作"></a>2.put操作</h2><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>源码</tag>
+        <tag>arrayList</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>idea使用</title>
+    <url>/2020/04/04/idea-shi-yong/</url>
+    <content><![CDATA[<h2 id="1-添加类和方法注释"><a href="#1-添加类和方法注释" class="headerlink" title="1.添加类和方法注释"></a>1.添加类和方法注释</h2><ul>
+<li><code>File -&gt; Settings -&gt; Editor -&gt; File and Code Templates -&gt; Files</code> 修改class头文件</li>
+</ul>
+<h2 id="2-常用快捷键"><a href="#2-常用快捷键" class="headerlink" title="2.常用快捷键"></a>2.常用快捷键</h2><ul>
+<li>1.进入preference设置 <code>command+,</code></li>
+<li></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <tags>
+        <tag>idea</tag>
+      </tags>
+  </entry>
 </search>
