@@ -40,7 +40,7 @@
   <entry>
     <title>再谈hashcode和equals</title>
     <url>/2020/04/04/zai-tan-hashcode-he-equals/</url>
-    <content><![CDATA[<h2 id="1hash表"><a href="#1hash表" class="headerlink" title="1hash表"></a>1hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><script>
+    <content><![CDATA[<h2 id="1、hash表"><a href="#1、hash表" class="headerlink" title="1、hash表"></a>1、hash表</h2><h2 id="2、为什么要重写equals和hashcode-方法"><a href="#2、为什么要重写equals和hashcode-方法" class="headerlink" title="2、为什么要重写equals和hashcode()方法"></a>2、为什么要重写equals和hashcode()方法</h2><h2 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h2><script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
