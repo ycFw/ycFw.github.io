@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>测试</title>
+      <link href="/2020/04/04/ce-shi/"/>
+      <url>/2020/04/04/ce-shi/</url>
+      
+        <content type="html"><![CDATA[<ul><li><p>测试图片</p><p><img src="/.com//image-20200404170620823.png" alt="image-20200404170620823"></p></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>开源框架总结</title>
       <link href="/2020/04/04/kai-yuan-kuang-jia-zong-jie/"/>
       <url>/2020/04/04/kai-yuan-kuang-jia-zong-jie/</url>
