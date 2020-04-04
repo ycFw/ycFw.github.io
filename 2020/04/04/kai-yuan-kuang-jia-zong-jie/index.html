@@ -522,15 +522,17 @@
 <li>4.ResultSetHandler：处理SQL的返回结果集</li>
 </ul>
 <h2 id="4-Mybatis四大处理器"><a href="#4-Mybatis四大处理器" class="headerlink" title="4.Mybatis四大处理器"></a>4.Mybatis四大处理器</h2><ul>
-<li>1.StatementHandler</li>
-<li>2.ParameterHandler</li>
-<li>3.ResultSetHandler</li>
-<li>4.TypeHandler（类型转换器）</li>
+<li><p>1.StatementHandler</p>
+</li>
+<li><p>2.ParameterHandler</p>
+</li>
+<li><p>3.ResultSetHandler</p>
+</li>
+<li><p>4.TypeHandler（类型转换器）</p>
+<p><u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhw96mioxj30xo0dwdhi.jpg" alt=""></u></p>
+</li>
 </ul>
-<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404153940781.png" alt="image-20200404153940781" style="zoom:50%;">
-
-<h2 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h2><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404154509551.png" alt="image-20200404154509551" style="zoom:50%;">
-
+<h2 id="5-Mybatis执行流程"><a href="#5-Mybatis执行流程" class="headerlink" title="5.Mybatis执行流程"></a>5.Mybatis执行流程</h2><p>​    <u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwalsbsij30xc0gsdm0.jpg" alt=""></u></p>
 <h2 id="6-一对一、一对多、延迟加载"><a href="#6-一对一、一对多、延迟加载" class="headerlink" title="6.一对一、一对多、延迟加载"></a>6.一对一、一对多、延迟加载</h2><ul>
 <li><p>一对一</p>
 <pre class=" language-java"><code class="language-java">使用<span class="token operator">&lt;</span>resultMap<span class="token operator">></span>中的<span class="token operator">&lt;</span>association<span class="token operator">></span>
@@ -566,11 +568,9 @@
 <p>OOP的补充，不是替代</p>
 </blockquote>
 <p>面向对象的不足？</p>
-<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160145060.png" alt="image-20200404160145060" style="zoom:50%;">
-
+<p><u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwb1w8xhj30ya0jcn1l.jpg" alt=""></u></p>
 <p>以上OOP两个不足，可以通过AOP进行改进：切点和切面，前置通知和后置通知</p>
-<img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404160707082.png" alt="image-20200404160707082" style="zoom:50%;">
-
+<p><u><img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwbewvtsj30w80im0vp.jpg" alt=""></u></p>
 <p>使用AOP的实际场景：</p>
 <ul>
 <li>日志：删除</li>
@@ -585,8 +585,7 @@
 <li>责任链模式：AOP</li>
 <li>策略模式：创建代理</li>
 </ul>
-<h1 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h1><img src="/Users/vino/Library/Application Support/typora-user-images/image-20200404161935175.png" alt="image-20200404161935175" style="zoom:50%;">
-
+<h1 id="三、SpringMVC"><a href="#三、SpringMVC" class="headerlink" title="三、SpringMVC"></a>三、SpringMVC</h1><p>​    <img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdhwbtub3sj312e0hy78u.jpg" alt=""></p>
 <h1 id="四、Spring-Boot"><a href="#四、Spring-Boot" class="headerlink" title="四、Spring Boot"></a>四、Spring Boot</h1><blockquote>
 <p>最主要的功能：自动装配</p>
 <p>以前不用spring boot，需要自己配置框架的配置文件</p>
@@ -868,37 +867,36 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/04/04/ce-shi/">
+                <a href="/2020/04/04/kai-yuan-kuang-jia-zong-jie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="测试">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="开源框架总结">
                         
-                        <span class="card-title">测试</span>
+                        <span class="card-title">开源框架总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-测试图片
+                            一、Mybatis1.Mybatis重要组件
+Mapper配置：实体类Student.java-数据表student，XML或注解
+
+Mybatis一般推荐XML
 
 
-
-
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src)
+Mapper接口：DAO层接口（只需要写接口，不用写实现类：需要遵循约定
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-04
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -906,6 +904,23 @@
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Spring/">
+                        <span class="chip bg-color">Spring</span>
+                    </a>
+                    
+                    <a href="/tags/Mybatis/">
+                        <span class="chip bg-color">Mybatis</span>
+                    </a>
+                    
+                    <a href="/tags/SpringBoot/">
+                        <span class="chip bg-color">SpringBoot</span>
+                    </a>
+                    
                 </div>
                 
             </div>
