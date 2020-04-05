@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="告别if/else, 一个码仔">
+    <meta name="keywords" content="分布式核心设计--缓存与锁, 一个码仔">
     <meta name="description" content="只要心够决">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>告别if/else | 一个码仔</title>
+    <title>分布式核心设计--缓存与锁 | 一个码仔</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">告别if/else</h1>
+                    <h1 class="description center-align post-title">分布式核心设计--缓存与锁</h1>
                 </div>
             </div>
         </div>
@@ -436,16 +436,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/demo/">
-                                <span class="chip bg-color">demo</span>
+                            <a href="/tags/%E7%BC%93%E5%AD%98%E4%B8%8E%E9%94%81/">
+                                <span class="chip bg-color">缓存与锁</span>
                             </a>
                         
-                            <a href="/tags/%E6%9E%9A%E4%B8%BE/">
-                                <span class="chip bg-color">枚举</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                                <span class="chip bg-color">设计模式</span>
+                            <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
+                                <span class="chip bg-color">分布式</span>
                             </a>
                         
                     </div>
@@ -460,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-04
+                    2020-04-05
                 </div>
                 
 
@@ -477,140 +473,56 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h2><p>最近看了codesheep的博客，这是b站上我最喜欢的一个编程up主。提到了if/else的几种替代方法，正好前阵子看了《设计模式之禅》，今天来做个总结。</p>
-<p>一个场景：一个后台管理系统有三种角色：</p>
+                <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>大数据、人工智能、区块链、边缘计算、微服务 –&gt; 分布式</p>
+<p>分布式：拆</p>
+<p>微服务&amp;分布式</p>
+<p>分布式：拆了就行</p>
+<p>微服务：纵向拆分（根据业务逻辑拆分，电商：用户、支付、购物…）、属于最小化拆分</p>
+<h2 id="2-CAP理论"><a href="#2-CAP理论" class="headerlink" title="2.CAP理论"></a>2.CAP理论</h2><p>任何一个分布式系统都必须重点考虑的原则。</p>
+<p>C：一致性（强一致性）：所有子节点中的数据时刻保持一致</p>
+<p>A：可用性：<strong><em>整体可用</em></strong>，不要失败就行</p>
+<p>P：分区容错性：<strong><em>允许部分失败</em></strong></p>
+<p>CAP理论：在任何分布式系统中，CAP三者不可能共存，只能存在两个</p>
+<p>基础知识：一般而言，至少要保证<strong><em>P可行</em></strong>，因为分布式经常会出现弱网环境，因此就需要在C和A之间二选一。</p>
+<h2 id="3-BASE理论"><a href="#3-BASE理论" class="headerlink" title="3.BASE理论"></a>3.BASE理论</h2><p>为了弥补CAP的不足。</p>
+<p>尽最大努力近似的实现CAP三者。</p>
 <ul>
-<li>ROOT_ADMIN：有权限A</li>
-<li>ORDER_ADMIN：有权限B</li>
-<li>NORMAL：有权限C</li>
+<li><p>强一致性：时时刻刻一致、短时间内一致</p>
+</li>
+<li><p>最终一致性：只要最后一致即可</p>
+</li>
 </ul>
-<h2 id="2-if-else"><a href="#2-if-else" class="headerlink" title="2.if/else"></a>2.if/else</h2><blockquote>
-<p>首先用到if/else，一个用户进来判断有什么行为。那么，骚操作来了…</p>
-</blockquote>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JudgeRole</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-  <span class="token keyword">public</span> String <span class="token function">judge</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    String result <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>roleName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"ROOT_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      result <span class="token operator">=</span> <span class="token string">"ROOT_ADMIN: "</span><span class="token operator">+</span><span class="token string">"has permission A"</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>roleName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"ORDER_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      result <span class="token operator">=</span> <span class="token string">"ORDER_ADMIN: "</span><span class="token operator">+</span><span class="token string">"has permision B"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>roleName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"NORMAL"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      result <span class="token operator">=</span> <span class="token string">"NORMAL"</span><span class="token operator">+</span><span class="token string">"has permission C"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token punctuation">{</span>
-      result <span class="token operator">=</span> <span class="token string">"xxx"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>存在两个问题：</p>
+<p><strong><em>BASE理论</em></strong>：首先满足A和P，因此不能满足C，但是可以用最终一致性来代替C（时刻一致性）。核心思想是用最终一致性来代替强一致性</p>
+<p>BASE：Basically Available 基本可用</p>
 <ul>
-<li>1.代码非常不优雅。。。。</li>
-<li>2.扩展性很差，代码冗余</li>
+<li><p>软状态（顾名思义）：多个节点时，允许中间某个时刻数据不一致</p>
+</li>
+<li><p>最终一致性</p>
+</li>
 </ul>
-<h2 id="3-枚举类"><a href="#3-枚举类" class="headerlink" title="3.枚举类"></a>3.枚举类</h2><blockquote>
-<p>既然有一对一的对应关系，那么自然可以用到枚举，首先要定义一个公共接口<code>RoleOperation</code>，表示不同角色能做自己的事。</p>
-</blockquote>
-<p>公共接口</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">RoleOperation</span><span class="token punctuation">{</span>
-  String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//表示某个角色可以做op操作</span>
-<span class="token punctuation">}</span></code></pre>
-<p>接下来需要定义一个有不同角色的枚举类，每个角色重写op方法</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> RoleEnum <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
-  <span class="token comment" spellcheck="true">//系统管理员</span>
-    ROOT_ADMIN <span class="token punctuation">{</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token string">"ROOT_ADMIN:"</span> <span class="token operator">+</span> <span class="token string">"has permission A"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment" spellcheck="true">//订单管理员</span>
-    ORDER_ADMIN <span class="token punctuation">{</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token string">"ORDER_ADMIN:"</span> <span class="token operator">+</span> <span class="token string">"has permission B"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token comment" spellcheck="true">//普通用户</span>
-    NORMAL <span class="token punctuation">{</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token string">"NORMAL:"</span> <span class="token operator">+</span> <span class="token string">"has permission C"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>主函数入口调用，一行代码即可</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JudgeRole</span><span class="token punctuation">{</span>
-  <span class="token keyword">public</span> String <span class="token function">judge</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">return</span> roleEnum<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>以后再要增加其他用户的操作权限，只需要去枚举类进行添加即可，方便快捷！</p>
-<h2 id="4-工厂模式"><a href="#4-工厂模式" class="headerlink" title="4.工厂模式"></a>4.工厂模式</h2><blockquote>
-<p>工厂模式的思想：首先针对业务的不同，分别编写各自的业务类，再用工厂类聚合各个业务类。</p>
-</blockquote>
-<p>首先编写三个业务类</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RootAdminRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token function">RootAdminRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission A"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderAdminRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token function">OrderAdminRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission B"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NormalRole</span> <span class="token keyword">implements</span> <span class="token class-name">RoleOperation</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> String roleName<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token function">NormalRole</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>roleName <span class="token operator">=</span> roleName<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> String <span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> roleName <span class="token operator">+</span> <span class="token string">"has permission C"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>编写工厂类：工厂类生产有权限的角色对象，对象行为被公共接口定义</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RoleFactory</span> <span class="token punctuation">{</span>
-    <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> RoleOperation<span class="token operator">></span> roleOperationMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">//静态块，初始化工作最先执行</span>
-    <span class="token keyword">static</span> <span class="token punctuation">{</span>
-        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"ROOT_ADMIN"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">RootAdminRole</span><span class="token punctuation">(</span><span class="token string">"ROOT_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"ORDER_ADMIN"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">OrderAdminRole</span><span class="token punctuation">(</span><span class="token string">"ORDER_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        roleOperationMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"NORMAL"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">NormalRole</span><span class="token punctuation">(</span><span class="token string">"NORMAL"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> RoleOperation <span class="token function">getOp</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> roleOperationMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>简单调用：一行代码即可。先得到角色对象，再执行op()行为</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">judge</span><span class="token punctuation">(</span>String roleName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-<span class="token comment" spellcheck="true">//        return RoleEnum.valueOf(roleName).op();</span>
-
-        <span class="token keyword">return</span> RoleFactory<span class="token punctuation">.</span><span class="token function">getOp</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>这样的话以后想扩展条件也很容易，只需要增加新代码，而不需要动以前的业务代码，非常符合“开闭原则”。</p>
-<h2 id="5-策略模式"><a href="#5-策略模式" class="headerlink" title="5.策略模式"></a>5.策略模式</h2><script>
+<h2 id="4-分布式缓存"><a href="#4-分布式缓存" class="headerlink" title="4.分布式缓存"></a>4.分布式缓存</h2><p>缓存问题</p>
+<p>秒杀系统开始之前提前缓存，缓解大量数据请求对数据库压力。</p>
+<ul>
+<li><strong>缓存击穿</strong>：某一个<strong><em>热点数据</em></strong>过期（iPhone12），造成大量用户请求直奔DB的现象。<ul>
+<li>解决1：监控线程（不推荐）：给热点数据加个监控线程，在快过期时更新。缺点：消耗资源，增加成本</li>
+<li>解决2：提前设置好时间，保证热点数据在高峰期不过期</li>
+</ul>
+</li>
+<li><strong>缓存雪崩</strong>：<strong><em>大量缓存全部失效</em></strong>（1.给大量缓存设置了相同的过期时间 ，如for() setExpires( 6h)，2.服务器故障)<ul>
+<li>解决1：合理分配缓存的过期时间，不要设置成一样的过期时间，使得缓存的过期时间不一致</li>
+<li>解决2：搭建缓存集群</li>
+</ul>
+</li>
+<li><strong>缓存穿透</strong>：<strong><em>防止恶意攻击</em></strong>。一般而言，不会缓存一些无意义的数据。因为只对热点数据进行缓存处理，但是如果恶意攻击就可以利用无用数据反复发起请求，绕过缓存对DB产生压力。<ul>
+<li>解决：将无意义的数据也进行缓存，并且将过期时间设置的相对短一些。</li>
+<li>通用方案：以上的本质都是“缓存失效”，通用解决方案：二级缓存（分布式缓存）。一般而言，本地缓存是一级缓存，分布式缓存是二级缓存。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-一致性hash"><a href="#5-一致性hash" class="headerlink" title="5.一致性hash"></a>5.一致性hash</h2><p>hash算法：映射</p>
+<p>字符串、图片、对象 -&gt; 数字</p>
+<p>hash(a.png) -&gt; 123</p>
+<script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
@@ -653,7 +565,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/04/04/gao-bie-if-else/">http://yoursite.com/2020/04/04/gao-bie-if-else/</a>
+                    <a href="http://yoursite.com/2020/04/05/fen-bu-shi-he-xin-she-ji-huan-cun-yu-suo/">http://yoursite.com/2020/04/05/fen-bu-shi-he-xin-she-ji-huan-cun-yu-suo/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -691,16 +603,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/demo/">
-                                    <span class="chip bg-color">demo</span>
+                                <a href="/tags/%E7%BC%93%E5%AD%98%E4%B8%8E%E9%94%81/">
+                                    <span class="chip bg-color">缓存与锁</span>
                                 </a>
                             
-                                <a href="/tags/%E6%9E%9A%E4%B8%BE/">
-                                    <span class="chip bg-color">枚举</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                                    <span class="chip bg-color">设计模式</span>
+                                <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
+                                    <span class="chip bg-color">分布式</span>
                                 </a>
                             
                         </div>
@@ -866,9 +774,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/04/05/fen-bu-shi-he-xin-she-ji-huan-cun-yu-suo/">
                     <div class="card-image">
@@ -891,9 +800,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -902,6 +811,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -924,25 +834,23 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/04/kai-yuan-kuang-jia-zong-jie/">
+                <a href="/2020/04/04/gao-bie-if-else/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="开源框架总结">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="告别if/else">
                         
-                        <span class="card-title">开源框架总结</span>
+                        <span class="card-title">告别if/else</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            一、Mybatis1.Mybatis重要组件
-Mapper配置：实体类Student.java-数据表student，XML或注解
+                            1.背景最近看了codesheep的博客，这是b站上我最喜欢的一个编程up主。提到了if/else的几种替代方法，正好前阵子看了《设计模式之禅》，今天来做个总结。
+一个场景：一个后台管理系统有三种角色：
 
-Mybatis一般推荐XML
-
-
-Mapper接口：DAO层接口（只需要写接口，不用写实现类：需要遵循约定
+ROOT_ADMIN：有权限A
+O
                         
                     </div>
                     <div class="publish-info">
@@ -960,16 +868,16 @@ Mapper接口：DAO层接口（只需要写接口，不用写实现类：需要�
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Spring/">
-                        <span class="chip bg-color">Spring</span>
+                    <a href="/tags/demo/">
+                        <span class="chip bg-color">demo</span>
                     </a>
                     
-                    <a href="/tags/Mybatis/">
-                        <span class="chip bg-color">Mybatis</span>
+                    <a href="/tags/%E6%9E%9A%E4%B8%BE/">
+                        <span class="chip bg-color">枚举</span>
                     </a>
                     
-                    <a href="/tags/SpringBoot/">
-                        <span class="chip bg-color">SpringBoot</span>
+                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="chip bg-color">设计模式</span>
                     </a>
                     
                 </div>

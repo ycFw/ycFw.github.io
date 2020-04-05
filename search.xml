@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>分布式核心设计--缓存与锁</title>
+      <link href="/2020/04/05/fen-bu-shi-he-xin-she-ji-huan-cun-yu-suo/"/>
+      <url>/2020/04/05/fen-bu-shi-he-xin-she-ji-huan-cun-yu-suo/</url>
+      
+        <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>大数据、人工智能、区块链、边缘计算、微服务 –&gt; 分布式</p><p>分布式：拆</p><p>微服务&amp;分布式</p><p>分布式：拆了就行</p><p>微服务：纵向拆分（根据业务逻辑拆分，电商：用户、支付、购物…）、属于最小化拆分</p><h2 id="2-CAP理论"><a href="#2-CAP理论" class="headerlink" title="2.CAP理论"></a>2.CAP理论</h2><p>任何一个分布式系统都必须重点考虑的原则。</p><p>C：一致性（强一致性）：所有子节点中的数据时刻保持一致</p><p>A：可用性：<strong><em>整体可用</em></strong>，不要失败就行</p><p>P：分区容错性：<strong><em>允许部分失败</em></strong></p><p>CAP理论：在任何分布式系统中，CAP三者不可能共存，只能存在两个</p><p>基础知识：一般而言，至少要保证<strong><em>P可行</em></strong>，因为分布式经常会出现弱网环境，因此就需要在C和A之间二选一。</p><h2 id="3-BASE理论"><a href="#3-BASE理论" class="headerlink" title="3.BASE理论"></a>3.BASE理论</h2><p>为了弥补CAP的不足。</p><p>尽最大努力近似的实现CAP三者。</p><ul><li><p>强一致性：时时刻刻一致、短时间内一致</p></li><li><p>最终一致性：只要最后一致即可</p></li></ul><p><strong><em>BASE理论</em></strong>：首先满足A和P，因此不能满足C，但是可以用最终一致性来代替C（时刻一致性）。核心思想是用最终一致性来代替强一致性</p><p>BASE：Basically Available 基本可用</p><ul><li><p>软状态（顾名思义）：多个节点时，允许中间某个时刻数据不一致</p></li><li><p>最终一致性</p></li></ul><h2 id="4-分布式缓存"><a href="#4-分布式缓存" class="headerlink" title="4.分布式缓存"></a>4.分布式缓存</h2><p>缓存问题</p><p>秒杀系统开始之前提前缓存，缓解大量数据请求对数据库压力。</p><ul><li><strong>缓存击穿</strong>：某一个<strong><em>热点数据</em></strong>过期（iPhone12），造成大量用户请求直奔DB的现象。<ul><li>解决1：监控线程（不推荐）：给热点数据加个监控线程，在快过期时更新。缺点：消耗资源，增加成本</li><li>解决2：提前设置好时间，保证热点数据在高峰期不过期</li></ul></li><li><strong>缓存雪崩</strong>：<strong><em>大量缓存全部失效</em></strong>（1.给大量缓存设置了相同的过期时间 ，如for() setExpires( 6h)，2.服务器故障)<ul><li>解决1：合理分配缓存的过期时间，不要设置成一样的过期时间，使得缓存的过期时间不一致</li><li>解决2：搭建缓存集群</li></ul></li><li><strong>缓存穿透</strong>：<strong><em>防止恶意攻击</em></strong>。一般而言，不会缓存一些无意义的数据。因为只对热点数据进行缓存处理，但是如果恶意攻击就可以利用无用数据反复发起请求，绕过缓存对DB产生压力。<ul><li>解决：将无意义的数据也进行缓存，并且将过期时间设置的相对短一些。</li><li>通用方案：以上的本质都是“缓存失效”，通用解决方案：二级缓存（分布式缓存）。一般而言，本地缓存是一级缓存，分布式缓存是二级缓存。</li></ul></li></ul><h2 id="5-一致性hash"><a href="#5-一致性hash" class="headerlink" title="5.一致性hash"></a>5.一致性hash</h2><p>hash算法：映射</p><p>字符串、图片、对象 -&gt; 数字</p><p>hash(a.png) -&gt; 123</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 缓存与锁 </tag>
+            
+            <tag> 分布式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>告别if/else</title>
       <link href="/2020/04/04/gao-bie-if-else/"/>
       <url>/2020/04/04/gao-bie-if-else/</url>
