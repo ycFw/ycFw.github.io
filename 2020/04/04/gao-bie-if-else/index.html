@@ -610,7 +610,43 @@
         <span class="token keyword">return</span> RoleFactory<span class="token punctuation">.</span><span class="token function">getOp</span><span class="token punctuation">(</span>roleName<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span></code></pre>
 <p>这样的话以后想扩展条件也很容易，只需要增加新代码，而不需要动以前的业务代码，非常符合“开闭原则”。</p>
-<h2 id="5-策略模式"><a href="#5-策略模式" class="headerlink" title="5.策略模式"></a>5.策略模式</h2><script>
+<h2 id="5-策略模式"><a href="#5-策略模式" class="headerlink" title="5.策略模式"></a>5.策略模式</h2><blockquote>
+<p>Define a family of alogorithms, encapsulate each one, and make them interchangeable.（定义一组算法，将每个算法都封装起来，并且使他们之间可以互换。）</p>
+</blockquote>
+<p>本场景同样可以用到策略模式。创建一个RoleContext类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RoleContext</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">//传入不同的策略对象，执行不同的业务</span>
+    <span class="token keyword">private</span> RoleOperation roleOperation<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">RoleContext</span><span class="token punctuation">(</span>RoleOperation roleOperation<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>roleOperation <span class="token operator">=</span> roleOperation<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> roleOperation<span class="token punctuation">.</span><span class="token function">op</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>传入roleOperation对象</p>
+<pre class=" language-java"><code class="language-java"> <span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">judge</span><span class="token punctuation">(</span>RoleOperation roleOperation<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        RoleContext roleContext <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RoleContext</span><span class="token punctuation">(</span>roleOperation<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> roleContext<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></code></pre>
+<p>执行业务代码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//        System.out.println(judge("ROLE_NORMAL"));</span>
+
+        JudgeRole judgeRole <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JudgeRole</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String result1 <span class="token operator">=</span> judgeRole<span class="token punctuation">.</span><span class="token function">judge</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">RootAdminRole</span><span class="token punctuation">(</span><span class="token string">"ROLE_ROOT_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String result2 <span class="token operator">=</span> judgeRole<span class="token punctuation">.</span><span class="token function">judge</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OrderAdminRole</span><span class="token punctuation">(</span><span class="token string">"ROLE_ORDER_ADMIN"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String result3 <span class="token operator">=</span> judgeRole<span class="token punctuation">.</span><span class="token function">judge</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">NormalRole</span><span class="token punctuation">(</span><span class="token string">"ROLE_NORMAL"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></code></pre>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6.总结"></a>6.总结</h2><p>其实仔细思考业务逻辑，发现有很多种方法可以替代if/else。。。。重要的还是思想，在这里还是得提高设计模式的知识，最近也一直在啃《设计模式之禅》这本书，感觉这本书娓娓道来，例子也很合适，希望可以一直坚持下去，写出更漂亮简介的Java代码！</p>
+<script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
