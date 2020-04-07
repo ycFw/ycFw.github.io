@@ -478,8 +478,7 @@
 <p>fail-fast机制（快速失败）是集合容器的<strong><em>错误检测机制</em></strong>。当多个线程对容器进行结构上的改变时，<strong><em>可能</em></strong>（并非一定）会引发fail-fast机制，报ConcurrentModificationException异常。</p>
 <p>结构上的改变：对容器元素进行修改不算，add或delete（增加或删除元素）算结构上的改变</p>
 </blockquote>
-<p>fail-fast机制的例子</p>
-<blockquote>
+<h3 id="1-fail-fast机制的例子"><a href="#1-fail-fast机制的例子" class="headerlink" title="1.fail-fast机制的例子"></a>1.fail-fast机制的例子</h3><blockquote>
 <p>A线程遍历容器元素，B线程遍历删除指定元素</p>
 </blockquote>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FailFastDemo</span> <span class="token punctuation">{</span>
@@ -527,7 +526,92 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>以上例子会引发fail-fast，会抛出 <code>java.util.ConcurrentModificationException</code> 异常。</p>
-<h4 id=""><a href="#" class="headerlink" title=""></a></h4><script>
+<h3 id="2-产生原因"><a href="#2-产生原因" class="headerlink" title="2.产生原因"></a>2.产生原因</h3><p>当程序对容器元素进行迭代时，某个线程对对容器结构进行了修改，就可能会抛出 <code>java.util.ConcurrentModificationException</code> 异常，从而产生fail-fast机制。</p>
+<p>当方法检测到对象的并发修改，同时不允许进行这种修改，就会抛出<code>ConcurrentModificationException</code>异常。同时需要注意的是，<strong>该异常不会始终指出对象已经由不同线程并发修改</strong>，如果单线程违反了规则，同样也有可能会抛出改异常。</p>
+<p>因此，迭代器的快速失败行为无法得到保证，它不能保证一定会出现该错误，但是快速失败操作会尽最大努力抛出ConcurrentModificationException异常，所以因此，为提高此类操作的正确性而编写一个依赖于此异常的程序是错误的做法，正确做法是：ConcurrentModificationException 应该仅用于检测 bug。在迭代求的源码中可以看到：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Itr</span> <span class="token keyword">implements</span> <span class="token class-name">Iterator</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> cursor<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> lastRet <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> expectedModCount <span class="token operator">=</span> ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>modCount<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>cursor <span class="token operator">!=</span> ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> E <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>lastRet <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>modCount <span class="token operator">==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>expectedModCount<span class="token punctuation">)</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ConcurrentModificationException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>迭代器在调用next()、remove()方法时都是调用checkForComodification()方法，该方法主要就是检测modCount == expectedModCount ? 若不等则抛出ConcurrentModificationException 异常，从而产生fail-fast机制。所以要弄清楚为什么会产生fail-fast机制我们就必须要用弄明白为什么modCount != expectedModCount ，他们的值在什么时候发生改变的。</p>
+<p>modCount在AbstractList 中定义的，为全局变量，会变是就是modCount。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">transient</span> <span class="token keyword">int</span> modCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></code></pre>
+<p>那么什么时候modCount会发生变化，下面看ArrayList的源码：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span>E paramE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span><span class="token keyword">int</span> paramInt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>elementData <span class="token operator">==</span> EMPTY_ELEMENTDATA<span class="token punctuation">)</span>
+            paramInt <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> paramInt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span>paramInt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span><span class="token keyword">int</span> paramInt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>modCount <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//修改modCount</span>
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">remove</span><span class="token punctuation">(</span>Object paramObject<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>paramObject <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>elementData<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span>
+                    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                <span class="token function">fastRemove</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>paramObject<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>elementData<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                <span class="token function">fastRemove</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">fastRemove</span><span class="token punctuation">(</span><span class="token keyword">int</span> paramInt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>modCount <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//修改modCount</span>
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>modCount <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//修改modCount</span>
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>可以看到，ArrayList中无论add、remove、clear方法只要是涉及了改变ArrayList<strong><em>元素的个数</em></strong>的方法都会导致modCount的改变。</p>
+<p>总结出fail-fast产生的根本原因：<strong><em>expectedModCount 的值与modCount的改变不同步，导致两者之间不等从而产生fail-fast机制。</em></strong></p>
+<p>回到上述的例子中，有两个线程（线程A，线程B）。其中线程A负责遍历list、线程B修改list。线程A在遍历list过程的某个时候（此时expectedModCount = modCount=N），线程启动，同时线程B减少一个元素，这时modCount的值发生改变（modCount - 1 = N - 1）。线程A继续遍历执行next方法时，通过checkForComodification方法发现expectedModCount  = N  ，而modCount = N - 1，两者不等，这时就抛出ConcurrentModificationException 异常，从而产生fail-fast机制。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3.解决方法"></a>3.解决方法</h3><ul>
+<li>在遍历过程中所有涉及到改变容器个数的地方全部加上 <code>synchronized</code> 或者直接使用 <code>Collections.synchronizedXXX</code> 容器，这样就可以解决。但是不推荐，因为增删造成的同步锁可能会阻塞遍历操作，影响吞吐。</li>
+<li>使用并发容器<code>CopyOnWriterArrayList</code></li>
+</ul>
+<script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
