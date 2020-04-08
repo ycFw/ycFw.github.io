@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java容器特性, 一个码仔">
+    <meta name="keywords" content="Java容器整合, 一个码仔">
     <meta name="description" content="只要心够决">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java容器特性 | 一个码仔</title>
+    <title>Java容器整合 | 一个码仔</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java容器特性</h1>
+                    <h1 class="description center-align post-title">Java容器整合</h1>
                 </div>
             </div>
         </div>
@@ -473,12 +473,74 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="1-Java容器简介"><a href="#1-Java容器简介" class="headerlink" title="1.Java容器简介"></a>1.Java容器简介</h2><h2 id="2-泛型"><a href="#2-泛型" class="headerlink" title="2.泛型"></a>2.泛型</h2><h2 id="3-两组接口"><a href="#3-两组接口" class="headerlink" title="3.两组接口"></a>3.两组接口</h2><h2 id="4-fail-fast机制"><a href="#4-fail-fast机制" class="headerlink" title="4.fail-fast机制"></a>4.fail-fast机制</h2><blockquote>
+                <h2 id="一-Java容器简介"><a href="#一-Java容器简介" class="headerlink" title="一.Java容器简介"></a>一.Java容器简介</h2><h3 id="0-数组和容器的区别"><a href="#0-数组和容器的区别" class="headerlink" title="0.数组和容器的区别"></a>0.数组和容器的区别</h3><ul>
+<li>1.存储的大小是否固定<ul>
+<li>数组的长度固定</li>
+<li>容器的长度可变</li>
+</ul>
+</li>
+<li>2.数据类型<ul>
+<li>数组可以存储基本类型，也可以存储引用类型</li>
+<li>容器只能存储引用类型，基本数据类型需要转换成对应的保证类才能存储到容器类中</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-泛型"><a href="#1-泛型" class="headerlink" title="1.泛型"></a>1.泛型</h3><h3 id="2-两组接口"><a href="#2-两组接口" class="headerlink" title="2.两组接口"></a>2.两组接口</h3><h4 id="1-Iterator和Iterator接口"><a href="#1-Iterator和Iterator接口" class="headerlink" title="1.Iterator和Iterator接口"></a>1.Iterator和Iterator接口</h4><ul>
+<li><p>Iterator接口定义</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Iterator</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">boolean</span> <span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    E <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">UnsupportedOperationException</span><span class="token punctuation">(</span><span class="token string">"remove"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">forEachRemaining</span><span class="token punctuation">(</span>Consumer<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> E<span class="token operator">></span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            action<span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>两个接口目的都在于遍历容器内的元素</li>
+<li>Iterator中有三个方法<ul>
+<li>next()</li>
+<li>hasnext()</li>
+<li>remove()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Iterable接口定义</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Iterable</span><span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token punctuation">{</span>
+
+    Iterator<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">forEach</span><span class="token punctuation">(</span>Consumer<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> T<span class="token operator">></span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>T t <span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            action<span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">default</span> Spliterator<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">spliterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> Spliterators<span class="token punctuation">.</span><span class="token function">spliteratorUnknownSize</span><span class="token punctuation">(</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>Collection接口扩展了了Iterable接口，有Iterator()这个方法</li>
+<li>迭代器模式：提供一种方法顺序访问一个聚合对象中各个元素，而又无需暴露该对象的内部表示</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Comparable和Compartor接口"><a href="#2-Comparable和Compartor接口" class="headerlink" title="2.Comparable和Compartor接口"></a>2.Comparable和Compartor接口</h4><h3 id="3-fail-fast机制"><a href="#3-fail-fast机制" class="headerlink" title="3.fail-fast机制"></a>3.fail-fast机制</h3><blockquote>
 <p>ArrayList, HashMap, TreeSet都有fail-fast机制。</p>
 <p>fail-fast机制（快速失败）是集合容器的<strong><em>错误检测机制</em></strong>。当多个线程对容器进行结构上的改变时，<strong><em>可能</em></strong>（并非一定）会引发fail-fast机制，报ConcurrentModificationException异常。</p>
 <p>结构上的改变：对容器元素进行修改不算，add或delete（增加或删除元素）算结构上的改变</p>
 </blockquote>
-<h3 id="1-fail-fast机制的例子"><a href="#1-fail-fast机制的例子" class="headerlink" title="1.fail-fast机制的例子"></a>1.fail-fast机制的例子</h3><blockquote>
+<h4 id="1-fail-fast机制的例子"><a href="#1-fail-fast机制的例子" class="headerlink" title="1.fail-fast机制的例子"></a>1.fail-fast机制的例子</h4><blockquote>
 <p>A线程遍历容器元素，B线程遍历删除指定元素</p>
 </blockquote>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FailFastDemo</span> <span class="token punctuation">{</span>
@@ -526,7 +588,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>以上例子会引发fail-fast，会抛出 <code>java.util.ConcurrentModificationException</code> 异常。</p>
-<h3 id="2-产生原因"><a href="#2-产生原因" class="headerlink" title="2.产生原因"></a>2.产生原因</h3><p>当程序对容器元素进行迭代时，某个线程对对容器结构进行了修改，就可能会抛出 <code>java.util.ConcurrentModificationException</code> 异常，从而产生fail-fast机制。</p>
+<h4 id="2-产生原因"><a href="#2-产生原因" class="headerlink" title="2.产生原因"></a>2.产生原因</h4><p>当程序对容器元素进行迭代时，某个线程对对容器结构进行了修改，就可能会抛出 <code>java.util.ConcurrentModificationException</code> 异常，从而产生fail-fast机制。</p>
 <p>当方法检测到对象的并发修改，同时不允许进行这种修改，就会抛出<code>ConcurrentModificationException</code>异常。同时需要注意的是，<strong>该异常不会始终指出对象已经由不同线程并发修改</strong>，如果单线程违反了规则，同样也有可能会抛出改异常。</p>
 <p>因此，迭代器的快速失败行为无法得到保证，它不能保证一定会出现该错误，但是快速失败操作会尽最大努力抛出ConcurrentModificationException异常，所以因此，为提高此类操作的正确性而编写一个依赖于此异常的程序是错误的做法，正确做法是：ConcurrentModificationException 应该仅用于检测 bug。在迭代求的源码中可以看到：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Itr</span> <span class="token keyword">implements</span> <span class="token class-name">Iterator</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
@@ -607,11 +669,195 @@
 <p>可以看到，ArrayList中无论add、remove、clear方法只要是涉及了改变ArrayList<strong><em>元素的个数</em></strong>的方法都会导致modCount的改变。</p>
 <p>总结出fail-fast产生的根本原因：<strong><em>expectedModCount 的值与modCount的改变不同步，导致两者之间不等从而产生fail-fast机制。</em></strong></p>
 <p>回到上述的例子中，有两个线程（线程A，线程B）。其中线程A负责遍历list、线程B修改list。线程A在遍历list过程的某个时候（此时expectedModCount = modCount=N），线程启动，同时线程B减少一个元素，这时modCount的值发生改变（modCount - 1 = N - 1）。线程A继续遍历执行next方法时，通过checkForComodification方法发现expectedModCount  = N  ，而modCount = N - 1，两者不等，这时就抛出ConcurrentModificationException 异常，从而产生fail-fast机制。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3.解决方法"></a>3.解决方法</h3><ul>
+<h4 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3.解决方法"></a>3.解决方法</h4><ul>
 <li>在遍历过程中所有涉及到改变容器个数的地方全部加上 <code>synchronized</code> 或者直接使用 <code>Collections.synchronizedXXX</code> 容器，这样就可以解决。但是不推荐，因为增删造成的同步锁可能会阻塞遍历操作，影响吞吐。</li>
 <li>使用并发容器<code>CopyOnWriterArrayList</code></li>
 </ul>
-<script>
+<h2 id="二、List容器"><a href="#二、List容器" class="headerlink" title="二、List容器"></a>二、List容器</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>List是一个接口，继承自Collection接口。</p>
+<p>AbstractList是一个抽象类，继承自AbstractCollection接口。</p>
+<h4 id="1-ArrayList和LinkedList"><a href="#1-ArrayList和LinkedList" class="headerlink" title="1.ArrayList和LinkedList"></a>1.ArrayList和LinkedList</h4><blockquote>
+<p>ArrayList和LinkedList是List最常用的两种实现</p>
+</blockquote>
+<ul>
+<li>1.ArrayList基于数组实现，存在容量限制。当元素自动超过最大容量时，会自动扩容。LinkedList基于双向链表实现，不存在容量限制。</li>
+<li>2.ArrayList由于基于数组实现，因此随机访问速度较快，随机插入和删除速度较慢。LinkedList随机插入和删除速度较快，随机访问速度较慢。</li>
+<li>3.ArrayList和LinkdList都不是线程安全的。</li>
+</ul>
+<h4 id="2-Vector和Stack"><a href="#2-Vector和Stack" class="headerlink" title="2.Vector和Stack"></a>2.Vector和Stack</h4><blockquote>
+<p>Vector和Stack的设计目标是作为线程安全的List实现，作为替代ArrayList</p>
+</blockquote>
+<ul>
+<li>1.Vector和ArrayList类似，也实现了List接口。但是，Vector中的主要方法都是Synchronized方法，即通过互斥同步方式保证线程安全。</li>
+<li>2.Stack也是一个同步容器。也使用了synchronized进行同步，实际上是继承自Vector类。</li>
+</ul>
+<h3 id="2-ArrayList"><a href="#2-ArrayList" class="headerlink" title="2.ArrayList"></a>2.ArrayList</h3><h4 id="1-要点"><a href="#1-要点" class="headerlink" title="1.要点"></a>1.要点</h4><p>ArrayList是一个数组队列，相当于一个动态数组。<strong><em>默认初始容量为10，添加元素时，如果发现容量已满，会自动扩容为原始大小的1.5倍。</em></strong>因此，尽量在初始化ArrayList时，为其指定合适的初始容量大小，减少扩容操作导致的性能开销。</p>
+<p>ArrayList定义：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractList</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+        <span class="token keyword">implements</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> RandomAccess<span class="token punctuation">,</span> Cloneable<span class="token punctuation">,</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable</code></pre>
+<p>可以看出几个基本特性：</p>
+<ul>
+<li>ArrayList实现了List接口，并集成了AbstractList，它支持所有List操作。</li>
+<li>ArrayList实现了RandomAccess接口，<strong>支持随机访问。</strong> RandomAccess是Java中用来倍List实现，为List提供快速访问功能的。ArrayList中我们通过index快速获取元素对象，这就是快速随机访问。</li>
+<li>ArrayList实现了Cloneable接口，支持<strong>深拷贝。</strong></li>
+<li>ArrayList实现了Serializable接口，能通过序列化方式传输。</li>
+<li>ArrayList<strong>不是线程安全的。</strong></li>
+</ul>
+<h4 id="2-ArrayList数据结构"><a href="#2-ArrayList数据结构" class="headerlink" title="2.ArrayList数据结构"></a>2.ArrayList数据结构</h4><p>ArrayList包含了两个重要元素，分别是elementData和size</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">transient</span> Object<span class="token punctuation">[</span><span class="token punctuation">]</span> elementData<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> size<span class="token punctuation">;</span></code></pre>
+<ul>
+<li>size是动态数组的实际大小。默认初始容量大小为10（可以在构造方法中指定初始大小）。</li>
+<li>elementData是一个Object数组，用于保存添加到ArrayList中的元素。</li>
+</ul>
+<h4 id="3-ArrayList的序列化"><a href="#3-ArrayList的序列化" class="headerlink" title="3.ArrayList的序列化"></a>3.ArrayList的序列化</h4><h4 id="4-ArrayList访问元素"><a href="#4-ArrayList访问元素" class="headerlink" title="4.ArrayList访问元素"></a>4.ArrayList访问元素</h4><p>ArrayList访问元素基于以下关键性源码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 获取第 index 个元素</span>
+<span class="token keyword">public</span> E <span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">rangeCheck</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">elementData</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+E <span class="token function">elementData</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>E<span class="token punctuation">)</span> elementData<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>实现非常简单，<strong>通过数组下标快速得到元素，时间复杂度为o(1)</strong></p>
+<h4 id="5-ArrayList添加元素"><a href="#5-ArrayList添加元素" class="headerlink" title="5.ArrayList添加元素"></a>5.ArrayList添加元素</h4><p>ArrayList添加元素，若发现容量已满，<strong>*自动扩容1.5倍。</strong>见以下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Increments modCount!!</span>
+    elementData<span class="token punctuation">[</span>size<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> e<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>elementData <span class="token operator">==</span> DEFAULTCAPACITY_EMPTY_ELEMENTDATA<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        minCapacity <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>DEFAULT_CAPACITY<span class="token punctuation">,</span> minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span>minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    modCount<span class="token operator">++</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// overflow-conscious code</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>minCapacity <span class="token operator">-</span> elementData<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token function">grow</span><span class="token punctuation">(</span>minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">grow</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// overflow-conscious code</span>
+    <span class="token keyword">int</span> oldCapacity <span class="token operator">=</span> elementData<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> newCapacity <span class="token operator">=</span> oldCapacity <span class="token operator">+</span> <span class="token punctuation">(</span>oldCapacity <span class="token operator">>></span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>newCapacity <span class="token operator">-</span> minCapacity <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        newCapacity <span class="token operator">=</span> minCapacity<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>newCapacity <span class="token operator">-</span> MAX_ARRAY_SIZE <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+        newCapacity <span class="token operator">=</span> <span class="token function">hugeCapacity</span><span class="token punctuation">(</span>minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// minCapacity is usually close to size, so this is a win:</span>
+    elementData <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">copyOf</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> newCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>ArrayList执行元素添加(add)操作时，调用ensureCapacityInternal()方法来保证容量足够。</p>
+<ul>
+<li>如果容量足够，将数组作为数组中size+1位置中元素写入，自增1。</li>
+<li>如果容量不够，需要使用grow()方法进行扩容。新容量的大小为<code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1)</code>，也就是原容量的1.5倍。扩容操作实际上是调用了<code>Arrays.copyOf</code><strong><em>将原数组拷贝为一个新数组</em></strong>，因此最好在创建ArrayList对象时就指定大概的容量大小，减少扩容操作的次数。</li>
+</ul>
+<h4 id="6-ArrayList删除元素"><a href="#6-ArrayList删除元素" class="headerlink" title="6.ArrayList删除元素"></a>6.ArrayList删除元素</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> E <span class="token function">remove</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">rangeCheck</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    modCount<span class="token operator">++</span><span class="token punctuation">;</span>
+    E oldValue <span class="token operator">=</span> <span class="token function">elementData</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> numMoved <span class="token operator">=</span> size <span class="token operator">-</span> index <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>numMoved <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+        System<span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> index<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> elementData<span class="token punctuation">,</span> index<span class="token punctuation">,</span> numMoved<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    elementData<span class="token punctuation">[</span><span class="token operator">--</span>size<span class="token punctuation">]</span> <span class="token operator">=</span> null<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// clear to let GC do its work</span>
+
+    <span class="token keyword">return</span> oldValue<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>ArrayList删除元素，实际上是调用<code>System.arraycopy()</code>将index后面的元素都复制到index位置上，因此复制的代价很高。</p>
+<h4 id="7-ArrayList的fail-fast"><a href="#7-ArrayList的fail-fast" class="headerlink" title="7.ArrayList的fail-fast"></a>7.ArrayList的fail-fast</h4><p><code>modCount</code>用来记录ArrayList结构发生变化的次数。结构发生变化是指添加或者删除至少一个元素的所有操作，或者是调整内部数组的大小，仅仅设置元素的值不算结构发生改变。</p>
+<p>在进行序列化或者迭代操作时，需要比较操作前后的<code>modCount</code>是否发生改变，如果改变则需抛出<code>ConcurrentModificationException</code>。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">writeObject</span><span class="token punctuation">(</span>java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>ObjectOutputStream s<span class="token punctuation">)</span>
+    <span class="token keyword">throws</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Write out element count, and any hidden stuff</span>
+    <span class="token keyword">int</span> expectedModCount <span class="token operator">=</span> modCount<span class="token punctuation">;</span>
+    s<span class="token punctuation">.</span><span class="token function">defaultWriteObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Write out size as capacity for behavioural compatibility with clone()</span>
+    s<span class="token punctuation">.</span><span class="token function">writeInt</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Write out all elements in the proper order.</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>size<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        s<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span>elementData<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>modCount <span class="token operator">!=</span> expectedModCount<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ConcurrentModificationException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="3-LinkedList"><a href="#3-LinkedList" class="headerlink" title="3.LinkedList"></a>3.LinkedList</h3><blockquote>
+<p>基于数据结构角度，视为双链表</p>
+</blockquote>
+<h4 id="1-要点-1"><a href="#1-要点-1" class="headerlink" title="1.要点"></a>1.要点</h4><p>LinkedList基于双链表实现。因此，顺序访问会非常高效，而随机访问效率较低。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LinkedList</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+    <span class="token keyword">extends</span> <span class="token class-name">AbstractSequentialList</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+    <span class="token keyword">implements</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> Deque<span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> Cloneable<span class="token punctuation">,</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable</code></pre>
+<p>基本特性：</p>
+<ul>
+<li>LinkedList实现了List接口，并继承了AbstractSequentialList，支持List的所有操作。</li>
+<li>LinkedList实现了Deque接口，也可以被当作队列（Queue）或双端队列（Deque）进行操作，此外，也可以用来实现栈。</li>
+<li>LinkedList实现了Cloneable接口，支持<strong>深拷贝。</strong></li>
+<li>LinkedList实现了Serializable接口，支持<strong>序列化。</strong></li>
+<li>LinkedList<strong>不是线程安全的。</strong></li>
+</ul>
+<h4 id="2-LinkedList数据结构"><a href="#2-LinkedList数据结构" class="headerlink" title="2.LinkedList数据结构"></a>2.LinkedList数据结构</h4><p>LinkedList内部维护了一个双链表，通过Node类型的头尾指针（first和last）来访问数据。</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 链表长度</span>
+<span class="token keyword">transient</span> <span class="token keyword">int</span> size <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 链表头节点</span>
+<span class="token keyword">transient</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> first<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 链表尾节点</span>
+<span class="token keyword">transient</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> last<span class="token punctuation">;</span></code></pre>
+<ul>
+<li>size：双链表中节点的个数，初始为0</li>
+<li>first和last：分别是双链表的头结点和尾节点</li>
+</ul>
+<p>Node是LinkedList的内部类，他表示链表中的元素实例，Node中包含三个元素：</p>
+<ul>
+<li><code>prev</code> 是该节点的上一个节点；</li>
+<li><code>next</code> 是该节点的下一个节点；</li>
+<li><code>item</code> 是该节点所包含的值。</li>
+</ul>
+<h4 id="3-LinkedList序列化"><a href="#3-LinkedList序列化" class="headerlink" title="3.LinkedList序列化"></a>3.LinkedList序列化</h4><h4 id="4-LinkedList访问元素"><a href="#4-LinkedList访问元素" class="headerlink" title="4.LinkedList访问元素"></a>4.LinkedList访问元素</h4><p>LinkedList访问元素关键代码为：</p>
+<pre class=" language-java"><code class="language-java">Node<span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token function">node</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// assert isElementIndex(index);</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">&lt;</span> <span class="token punctuation">(</span>size <span class="token operator">>></span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Node<span class="token operator">&lt;</span>E<span class="token operator">></span> x <span class="token operator">=</span> first<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> index<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+            x <span class="token operator">=</span> x<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> x<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        Node<span class="token operator">&lt;</span>E<span class="token operator">></span> x <span class="token operator">=</span> last<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> size <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">></span> index<span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span>
+            x <span class="token operator">=</span> x<span class="token punctuation">.</span>prev<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> x<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>判断index在链表的前半部分还是后半部分</li>
+<li>如果是前半部分，则从头结点开始找；如果是后半部分，则从尾节点开始找</li>
+</ul>
+<p>显然，LinkedList这种顺序访问元素的方式效率不如ArrayList随机访问元素。</p>
+<h4 id="5-LinkedList添加元素"><a href="#5-LinkedList添加元素" class="headerlink" title="5.LinkedList添加元素"></a>5.LinkedList添加元素</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">void</span> <span class="token function">linkLast</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> l <span class="token operator">=</span> last<span class="token punctuation">;</span>
+    <span class="token keyword">final</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> newNode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>l<span class="token punctuation">,</span> e<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    last <span class="token operator">=</span> newNode<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>l <span class="token operator">==</span> null<span class="token punctuation">)</span>
+        first <span class="token operator">=</span> newNode<span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+        l<span class="token punctuation">.</span>next <span class="token operator">=</span> newNode<span class="token punctuation">;</span>
+    size<span class="token operator">++</span><span class="token punctuation">;</span>
+    modCount<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="6-LinkedList删除元素"><a href="#6-LinkedList删除元素" class="headerlink" title="6.LinkedList删除元素"></a>6.LinkedList删除元素</h4><h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h3><script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
@@ -863,32 +1109,36 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/04/07/java-rong-qi-te-xing/">
+                <a href="/2020/04/07/springboot/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Java容器特性">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="springboot">
                         
-                        <span class="card-title">Java容器特性</span>
+                        <span class="card-title">springboot</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.Java容器简介2.泛型3.两组接口4.fail-fast机制
-ArrayList, HashMap, TreeSet都有fail-fast机制。
-fail-fast机制（快速失败）是集合容器的错误检测机制。当多个线程对容器进行结构上的
+                            环境准备
+jdk：jdk1.8
+maven：Apache Maven3.6.3
+Idea：2019
+SpringBoot1.5.9
+
+Maven设置profile标签，告诉maven用jdk1.8编译
+IDEA设置idea中配成自己下载的m
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-07
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-07
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -897,16 +1147,11 @@ fail-fast机制（快速失败）是集合容器的错误检测机制。当多�
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java%E5%AE%B9%E5%99%A8/">
-                        <span class="chip bg-color">Java容器</span>
-                    </a>
-                    
-                    <a href="/tags/fail-fast/">
-                        <span class="chip bg-color">fail-fast</span>
+                    <a href="/tags/springboot/">
+                        <span class="chip bg-color">springboot</span>
                     </a>
                     
                 </div>
