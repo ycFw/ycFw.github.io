@@ -535,7 +535,137 @@
 </ul>
 </li>
 </ul>
-<h4 id="2-Comparable和Compartor接口"><a href="#2-Comparable和Compartor接口" class="headerlink" title="2.Comparable和Compartor接口"></a>2.Comparable和Compartor接口</h4><h3 id="3-fail-fast机制"><a href="#3-fail-fast机制" class="headerlink" title="3.fail-fast机制"></a>3.fail-fast机制</h3><blockquote>
+<h3 id="2-Comparable和Compartor接口"><a href="#2-Comparable和Compartor接口" class="headerlink" title="2.Comparable和Compartor接口"></a>2.Comparable和Compartor接口</h3><h4 id="1-为什么需要比较器"><a href="#1-为什么需要比较器" class="headerlink" title="1.为什么需要比较器"></a>1.为什么需要比较器</h4><h4 id="2-两个比较器的区别"><a href="#2-两个比较器的区别" class="headerlink" title="2.两个比较器的区别"></a>2.两个比较器的区别</h4><ul>
+<li>Comparable：内部比较器<ul>
+<li>需要修改比较对象所属类的代码，有倾入性，在类中编写比较逻辑</li>
+<li>类需要实现Comparable接口，<strong>重写compareTo方法</strong>，注意返回值的数值</li>
+</ul>
+</li>
+<li>Compartor：外部比较器<ul>
+<li>不需要修改比较独享所属类的代码，无倾入性</li>
+<li>比较器实现Compartor接口，<strong>重写compare方法</strong>，注意返回值</li>
+<li>在Collections.sort排序中使用外部比较器</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-代码例子"><a href="#3-代码例子" class="headerlink" title="3.代码例子"></a>3.代码例子</h4><ul>
+<li><p>Comparable内部比较器，比较对象为Person类的实例对象</p>
+<p>Person类中重写Comparable的方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token keyword">implements</span> <span class="token class-name">Comparable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String city<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token function">Person</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">,</span> String name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">,</span> String city<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>city <span class="token operator">=</span> city<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token function">Person</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">,</span> String city<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>city <span class="token operator">=</span> city<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setId</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAge</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">getCity</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> city<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCity</span><span class="token punctuation">(</span>String city<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>city <span class="token operator">=</span> city<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"Person{"</span> <span class="token operator">+</span>
+                <span class="token string">"id="</span> <span class="token operator">+</span> id <span class="token operator">+</span>
+                <span class="token string">", name='"</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", age="</span> <span class="token operator">+</span> age <span class="token operator">+</span>
+                <span class="token string">", city='"</span> <span class="token operator">+</span> city <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">'}'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">//重写Comparable的方法</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compareTo</span><span class="token punctuation">(</span>Object o<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//1,-1,0：当前对象大，传入的对象大，相等</span>
+        Person inputPerson <span class="token operator">=</span> <span class="token punctuation">(</span>Person<span class="token punctuation">)</span> o<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//根据学号降序排列</span>
+        <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">&lt;</span> inputPerson<span class="token punctuation">.</span>id <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">==</span> inputPerson<span class="token punctuation">.</span>id <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//如果学号相同，再根据学号升序</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>result <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//调用String已经重写过的compareTo方法,默认升序</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>inputPerson<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//        return 1;  //当前对象大</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Comparable比较器</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ComparableDemo</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        List<span class="token operator">&lt;</span>Person<span class="token operator">></span> personList <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Person person1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">"zs"</span><span class="token punctuation">,</span> <span class="token number">23</span><span class="token punctuation">,</span> <span class="token string">"suzhou"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Person person2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"ls"</span><span class="token punctuation">,</span> <span class="token number">24</span><span class="token punctuation">,</span> <span class="token string">"suzhou"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Person person3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"ww"</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">,</span> <span class="token string">"suzhou"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        personList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>person1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        personList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>person2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        personList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>person3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Collections<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>personList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>personList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>Compartor外部比较器</p>
+<p>比较对象为Student类的实例，不需要对类进行修改，无倾入性</p>
+<p>Compartor比较器，实现Compartor接口，重写compare方法</p>
+<pre class=" language-java"><code class="language-java"> <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Object o1<span class="token punctuation">,</span> Object o2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Student student1 <span class="token operator">=</span> <span class="token punctuation">(</span>Student<span class="token punctuation">)</span> o1<span class="token punctuation">;</span>
+        Student student2 <span class="token operator">=</span> <span class="token punctuation">(</span>Student<span class="token punctuation">)</span> o2<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//升序</span>
+        <span class="token keyword">return</span> student1<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> student2<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>比较中加入该比较器</p>
+<pre class=" language-java"><code class="language-java"> <span class="token comment" spellcheck="true">//加入外部比较器，使用外部比较器</span>
+        Collections<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">CompartorDemo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h3 id="3-fail-fast机制"><a href="#3-fail-fast机制" class="headerlink" title="3.fail-fast机制"></a>3.fail-fast机制</h3><blockquote>
 <p>ArrayList, HashMap, TreeSet都有fail-fast机制。</p>
 <p>fail-fast机制（快速失败）是集合容器的<strong><em>错误检测机制</em></strong>。当多个线程对容器进行结构上的改变时，<strong><em>可能</em></strong>（并非一定）会引发fail-fast机制，报ConcurrentModificationException异常。</p>
 <p>结构上的改变：对容器元素进行修改不算，add或delete（增加或删除元素）算结构上的改变</p>
