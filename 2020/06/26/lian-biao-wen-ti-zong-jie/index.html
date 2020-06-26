@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分治, 一个码仔">
+    <meta name="keywords" content="链表问题总结, 一个码仔">
     <meta name="description" content="只要心够决">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分治 | 一个码仔</title>
+    <title>链表问题总结 | 一个码仔</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">分治</h1>
+                    <h1 class="description center-align post-title">链表问题总结</h1>
                 </div>
             </div>
         </div>
@@ -436,8 +436,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%88%86%E6%B2%BB/">
-                                <span class="chip bg-color">分治</span>
+                            <a href="/tags/%E7%AE%97%E6%B3%95/">
+                                <span class="chip bg-color">算法</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%93%BE%E8%A1%A8/">
+                                <span class="chip bg-color">链表</span>
                             </a>
                         
                     </div>
@@ -452,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-05-01
+                    2020-06-26
                 </div>
                 
 
@@ -469,55 +473,106 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="1-LeetCode53-最大子序和"><a href="#1-LeetCode53-最大子序和" class="headerlink" title="1.LeetCode53.最大子序和"></a>1.LeetCode53.最大子序和</h3><blockquote>
-<p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
-<pre class=" language-java"><code class="language-java">输入<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-输出<span class="token operator">:</span> <span class="token number">6</span>
-解释<span class="token operator">:</span> 连续子数组 <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span> 的和最大，为 <span class="token number">6</span>。</code></pre>
+                <blockquote>
+<p>  链表问题都可以用递归或者迭代来完成，在没有特殊要求下，尽量使用递归，简洁高效。</p>
 </blockquote>
-<p>思路：分而治之，分别递归：</p>
-<ul>
-<li>1.计算[left, mid]和[mid+1, right]两段的子序最大和</li>
-<li>2.计算包含左半部分的<strong><em>最右元素</em></strong>的子序列的最大和</li>
-<li>3.计算包含右半部分的<strong><em>最左元素</em></strong>的子序列的最大和</li>
-<li>4.分别递归求解，并取它们的最大值</li>
+<h2 id="一-相交链表、成环问题"><a href="#一-相交链表、成环问题" class="headerlink" title="一.相交链表、成环问题"></a>一.相交链表、成环问题</h2><blockquote>
+<p>  相交链表问题需要考虑两个链表是否存在环，别看问题简单，其写出bug free的代码难度较大</p>
+</blockquote>
+<h3 id="1-无环情况下，判断链表是否相交"><a href="#1-无环情况下，判断链表是否相交" class="headerlink" title="1.无环情况下，判断链表是否相交"></a>1.无环情况下，判断链表是否相交</h3><ul>
+<li><p>遍历第一个链表，将链表尾节点接到第二个链表的头结点上，判断是否可以遍历到头结点</p>
+<pre class=" language-java"><code class="language-java">  <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isIntersect1</span><span class="token punctuation">(</span>ListNode head1<span class="token punctuation">,</span> ListNode head2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>head1 <span class="token operator">==</span> null <span class="token operator">||</span> head2 <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    ListNode l1 <span class="token operator">=</span> head1<span class="token punctuation">,</span> l2 <span class="token operator">=</span> head2<span class="token punctuation">;</span>
+    <span class="token keyword">boolean</span> isIntersect <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>l1<span class="token punctuation">.</span>next <span class="token operator">!=</span> null<span class="token punctuation">)</span> l1 <span class="token operator">=</span> l1<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+       <span class="token comment" spellcheck="true">//第一个链表的尾节点的next是第二个链表的头结点</span>
+    l1<span class="token punctuation">.</span>next <span class="token operator">=</span> l2<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//遍历第二个链表看是否可以回到头结点head2</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>l2 <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>l2 <span class="token operator">==</span> head2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          isIntersect <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      l2 <span class="token operator">=</span> l2<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> isIntersect<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span></code></pre>
+</li>
 </ul>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">maxSubArray</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">//分治法</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>nums <span class="token operator">==</span> null <span class="token operator">||</span> nums<span class="token punctuation">.</span>length <span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token function">maxSubArrayDivideWithBorder</span><span class="token punctuation">(</span>nums<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> nums<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">int</span> <span class="token function">maxSubArrayDivideWithBorder</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> left<span class="token punctuation">,</span> <span class="token keyword">int</span> right<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>left <span class="token operator">==</span> right<span class="token punctuation">)</span> <span class="token keyword">return</span> nums<span class="token punctuation">[</span>left<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-        <span class="token comment" spellcheck="true">//计算[left, mid]和[mid+1, right]这两段的子序列最大和</span>
-        <span class="token keyword">int</span> mid <span class="token operator">=</span> <span class="token punctuation">(</span>left <span class="token operator">+</span> right<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>
-        <span class="token keyword">int</span> leftMax <span class="token operator">=</span> <span class="token function">maxSubArrayDivideWithBorder</span><span class="token punctuation">(</span>nums<span class="token punctuation">,</span> left<span class="token punctuation">,</span> mid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">int</span> rightMax <span class="token operator">=</span> <span class="token function">maxSubArrayDivideWithBorder</span><span class="token punctuation">(</span>nums<span class="token punctuation">,</span> mid<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment" spellcheck="true">//计算包含左半部分的最右元素的子序列最大和</span>
-        <span class="token keyword">int</span> leftCrossNum <span class="token operator">=</span> nums<span class="token punctuation">[</span>mid<span class="token punctuation">]</span><span class="token punctuation">,</span> leftCrossMax <span class="token operator">=</span> nums<span class="token punctuation">[</span>mid<span class="token punctuation">]</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span>mid<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> i<span class="token operator">>=</span>left<span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            leftCrossNum <span class="token operator">+=</span> nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-            leftCrossMax <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>leftCrossMax<span class="token punctuation">,</span> leftCrossNum<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token comment" spellcheck="true">//计算包含右半部分的最左元素的子序列最大和</span>
-        <span class="token keyword">int</span> rightCrossNum <span class="token operator">=</span> nums<span class="token punctuation">[</span>mid<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> rightCrossMax <span class="token operator">=</span> nums<span class="token punctuation">[</span>mid<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span>mid<span class="token operator">+</span><span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">&lt;=</span>right<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            rightCrossNum <span class="token operator">+=</span> nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-            rightCrossMax <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>rightCrossMax<span class="token punctuation">,</span> rightCrossNum<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token keyword">int</span> crossMidMax <span class="token operator">=</span> leftCrossMax <span class="token operator">+</span> rightCrossMax<span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>crossMidMax<span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>leftMax<span class="token punctuation">,</span> rightMax<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
 <ul>
-<li>时间复杂度：O(nlogn)，logn层递归，每层遍历n次</li>
-<li>空间复杂度：O(logn)，递归时栈使用的空间</li>
+<li><p>直接比较两个链表的尾节点是否相同</p>
+<pre class=" language-java"><code class="language-java">  <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isIntersect2</span><span class="token punctuation">(</span>ListNode head1<span class="token punctuation">,</span> ListNode head2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>head1 <span class="token operator">==</span> null <span class="token operator">||</span> head2 <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    ListNode l1 <span class="token operator">=</span> head1<span class="token punctuation">,</span> l2 <span class="token operator">=</span> head2<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>l1<span class="token punctuation">.</span>next <span class="token operator">!=</span> null<span class="token punctuation">)</span> l1 <span class="token operator">=</span> l1<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>l2<span class="token punctuation">.</span>next <span class="token operator">!=</span> null<span class="token punctuation">)</span> l2 <span class="token operator">=</span> l2<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>l1 <span class="token operator">==</span> l2<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+<h3 id="2-找到相交链表的第一个相交节点"><a href="#2-找到相交链表的第一个相交节点" class="headerlink" title="2.找到相交链表的第一个相交节点"></a>2.找到相交链表的第一个相交节点</h3><ul>
+<li><p>双指针迭代</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ListNode <span class="token function">getIntersectionNode</span><span class="token punctuation">(</span>ListNode headA<span class="token punctuation">,</span> ListNode headB<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>headA <span class="token operator">==</span> null <span class="token operator">&amp;&amp;</span> headB <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>headA <span class="token operator">==</span> null <span class="token operator">||</span> headB <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+  ListNode l1 <span class="token operator">=</span> headA<span class="token punctuation">,</span> l2 <span class="token operator">=</span> headB<span class="token punctuation">;</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span>l1 <span class="token operator">!=</span> l2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        l1 <span class="token operator">=</span> <span class="token punctuation">(</span>l1 <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">?</span> headB <span class="token operator">:</span> l1<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+      l2 <span class="token operator">=</span> <span class="token punctuation">(</span>l2 <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">?</span> headA <span class="token operator">:</span> l2<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> l1<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+<h3 id="3-判断单链表是否存在环"><a href="#3-判断单链表是否存在环" class="headerlink" title="3.判断单链表是否存在环"></a>3.判断单链表是否存在环</h3><ul>
+<li><p>快慢指针追逐</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">hasCycle</span><span class="token punctuation">(</span>ListNode head<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>head <span class="token operator">==</span> null <span class="token operator">||</span> head<span class="token punctuation">.</span>next <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  ListNode fast <span class="token operator">=</span> head<span class="token punctuation">,</span> slow <span class="token operator">=</span> head<span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>fast<span class="token punctuation">.</span>next <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">.</span>next <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      slow <span class="token operator">=</span> slow<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    fast <span class="token operator">=</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>slow <span class="token operator">==</span> fast<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+<h3 id="4-找到环形链表中的入口节点"><a href="#4-找到环形链表中的入口节点" class="headerlink" title="4.找到环形链表中的入口节点"></a>4.找到环形链表中的入口节点</h3><ul>
+<li><p>两次遍历</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ListNode <span class="token function">detectCycle</span><span class="token punctuation">(</span>ListNode head<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  ListNode slow <span class="token operator">=</span> head<span class="token punctuation">,</span> fast <span class="token operator">=</span> head<span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>fast <span class="token operator">==</span> null <span class="token operator">||</span> fast<span class="token punctuation">.</span>next <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    slow <span class="token operator">=</span> slow<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    fast <span class="token operator">=</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fast <span class="token operator">==</span> slow<span class="token punctuation">)</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+
+  fast <span class="token operator">=</span> head<span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>slow <span class="token operator">!=</span> fast<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      slow <span class="token operator">=</span> slow<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    fast <span class="token operator">=</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+     <span class="token keyword">return</span> slow<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+<h3 id="5-找出带环的两条链表相交的第一个节点"><a href="#5-找出带环的两条链表相交的第一个节点" class="headerlink" title="5.找出带环的两条链表相交的第一个节点"></a>5.找出带环的两条链表相交的第一个节点</h3><ul>
+<li>如果只有一条链表带环，则此时两条链表不可能相交。<ul>
+<li>证明：相交链表必须满足<strong>相交节点后的所有节点为两个链表所共享</strong>。如果只有一条链表带环却存在相交节点，则不带环的链表却出现了环，因此假设不成立。</li>
+</ul>
+</li>
+<li>两个链表都带环，如果两条链表相交，<strong><em>则他们共享一个环</em></strong>。</li>
+<li>存在两种情况：交点在环中；交点不在环中<ul>
+<li>1.分别找出两个链表的环入口节点pos1, pos2</li>
+<li>2.如果pos1 == pos2，则说明交点不在环中。以第一条链表根据不带环的情况，找出环形链表的入口节点。</li>
+<li>3.如果pos1 != pos2，则说明交点在环中或者没有相交节点。从pos1开始遍历环中的节点，如果没有发现节点与pos2相等，则不存在交点；否则，存在交点。</li>
+<li>4.分别以pos1和pos2作为终止节点，用求不带环单链表交点的方法求解。其中，必然一个有解，一个无解。取有解的那一组作为答案。</li>
+</ul>
+</li>
 </ul>
 <script>
         document.querySelectorAll('.github-emoji')
@@ -562,7 +617,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://yoursite.com/2020/05/01/fen-zhi/">http://yoursite.com/2020/05/01/fen-zhi/</a>
+                    <a href="http://yoursite.com/2020/06/26/lian-biao-wen-ti-zong-jie/">http://yoursite.com/2020/06/26/lian-biao-wen-ti-zong-jie/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -600,8 +655,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%88%86%E6%B2%BB/">
-                                    <span class="chip bg-color">分治</span>
+                                <a href="/tags/%E7%AE%97%E6%B3%95/">
+                                    <span class="chip bg-color">算法</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%93%BE%E8%A1%A8/">
+                                    <span class="chip bg-color">链表</span>
                                 </a>
                             
                         </div>
@@ -767,46 +826,36 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/05/01/suan-fa/">
+                <a href="/2020/06/26/lian-biao-wen-ti-zong-jie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="算法">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="链表问题总结">
                         
-                        <span class="card-title">算法</span>
+                        <span class="card-title">链表问题总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-小兔的棋盘，卡特兰数
+  链表问题都可以用递归或者迭代来完成，在没有特殊要求下，尽量使用递归，简洁高效。
 
-类似问题：不同的二叉搜索树
+一.相交链表、成环问题
+  相交链表问题需要考虑两个链表是否存在环，别看问题简单，其写出bug free的代码难度较大
 
-栈实现队列，队列实现栈
-
-队列实现栈：只需要一个基于链表的队列即可
-栈实现队列
-
-
-迷宫中的最短路径
-
-LeetCode76：滑动窗口
-
-正整数数组中连续区间和等于target
-
-面试
+1.无环情况下，判断链表是否相
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-01
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-26
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -814,6 +863,19 @@ LeetCode76：滑动窗口
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">算法</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%93%BE%E8%A1%A8/">
+                        <span class="chip bg-color">链表</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -825,43 +887,26 @@ LeetCode76：滑动窗口
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/19/shua-ti-ji-lu/">
+                <a href="/2020/05/20/httpsmvnrepository/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="刷题记录">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="!-- httpsmvnrepository">
                         
-                        <span class="card-title">刷题记录</span>
+                        <span class="card-title">!-- httpsmvnrepository</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1.矩阵、数组问题
-数组，偏移量，边界
-
-
-Acwing756–蛇形矩阵
-LeetCode54–螺旋矩阵
-offer–旋转数组
-offer44–扑克牌的顺子    
-
-2.位运算
-异或处理，按位与
-
-
-3.链表
-
-
-递归，迭代
-
-
-Leet
+                            &lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+&lt;dependency>
+    &lt;groupId>org.spr
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-20
                             </span>
                         <span class="publish-author">
                             
@@ -870,14 +915,6 @@ Leet
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
                 </div>
                 
             </div>
